@@ -9,6 +9,28 @@
 
 #include <ucontext.h> // biblioteca POSIX de trocas de contexto
 
+#define STACKSIZE 64 * 1024 // tamanho de pilha das threads
+
+#define MAIN_PID 0
+#define DISPATCHER_PID 1
+
+// status das tasks atuais
+enum task_state
+{
+  READY,
+  RUNNING,
+  SUSPENDED,
+  TERMINATED
+};
+
+// error exit codes
+enum error_codes
+{
+  SUCESS,
+  STACK_CREATION_ERROR,
+  NULL_PTR_ERROR
+};
+
 // Estrutura que define um Task Control Block (TCB)
 typedef struct task_t
 {

@@ -1,27 +1,22 @@
 #include "ppos.h"
 #include "ppos_data.h"
+#include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ucontext.h>
 
 // #define DEBUG
 
-#define STACKSIZE 64 * 1024 // tamanho de pilha das threads
-
-// status das tasks atuais
-#define READY 0
-#define RUNNING 1
-#define SUSPENDED 2
-#define TERMINATED 3
-
-// error codes
-#define SUCESS 0
-#define STACK_CREATION_ERROR -1
-#define NULL_PTR_ERROR -2
-
 task_t main_task;
+task_t dispatcher_task;              // tarefa do dispatcher
 unsigned long long last_task_id = 0; // id da ultima tarefa criada
 task_t *curr = NULL;                 // task atualmente rodando
+task_t *user_tasks = NULL;           // fila de tarefas do usuario
+
+// declaracoes de prototipos de funcoes privadas
+void dispatcher(void);
+task_t *scheduler(void);
+void task_print(void *elem);
 
 void ppos_init()
 {
@@ -29,17 +24,83 @@ void ppos_init()
     setvbuf(stdout, 0, _IONBF, 0);
 
     // inicia a tarefa main
-    main_task.id = 0;
+    main_task.id = MAIN_PID;
     main_task.status = RUNNING;
     curr = &main_task;
 
 #ifdef DEBUG
     printf("ppos_init: task main iniciada, id = %d\n", main_task.id);
 #endif
+
+#ifdef DEBUG
+    printf("ppos_init: inicializando o dispatcher\n");
+#endif
+
+    // inicia a tarefa dispatcher
+    task_init(&dispatcher_task, (void *)dispatcher, NULL);
+}
+
+task_t *scheduler(void)
+{
+#ifdef DEBUG
+    printf("scheduler: procurando nova task\n");
+    queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
+#endif
+
+    task_t *next = user_tasks;
+    queue_remove((queue_t **)&user_tasks, (queue_t *)next);
+
+    return next;
+}
+
+void dispatcher(void)
+{
+    while (queue_size((queue_t *)user_tasks) > 0)
+    {
+#ifdef DEBUG
+        printf("dispatcher: recebendo o controle\n");
+#endif
+
+        task_t *next = scheduler();
+
+#ifdef DEBUG
+        printf("dispatcher: proxima task %p\n", next);
+#endif
+
+        if (next)
+        {
+            task_switch(next);
+
+            switch (next->status)
+            {
+            case READY:
+                /* code */
+                break;
+            case TERMINATED:
+                /* code */
+                break;
+            case SUSPENDED:
+                /* code */
+                break;
+            case RUNNING:
+
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+
+    task_exit(0);
 }
 
 int task_init(task_t *task, void (*start_routine)(void *), void *arg)
 {
+#ifdef DEBUG
+    printf("task_init: iniciando nova task...\n");
+#endif
+
     getcontext(&(task->context));
 
     // inicializa a pilha da tarefa
@@ -65,10 +126,31 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     task->prev = task->next = NULL;
 
 #ifdef DEBUG
+    printf("task_init: adicionando na fila...\n");
+#endif
+
+    queue_append((queue_t **)&user_tasks, (queue_t *)task);
+
+#ifdef DEBUG
     printf("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
 #endif
 
     return task->id;
+}
+
+void task_yield()
+{
+#ifdef DEBUG
+    printf("task_yield: taks id = %d passou o controle para o dispatcher\n", curr->id);
+#endif
+
+    // nao coloca o main de volta na fila
+    if (curr->id != 0)
+    {
+        queue_append((queue_t **)&user_tasks, (queue_t *)curr);
+    }
+
+    task_switch(&dispatcher_task);
 }
 
 int task_id(void)
@@ -98,19 +180,37 @@ int task_switch(task_t *task)
 
 void task_exit(int exit_code)
 {
-    if (curr->id == 0)
+    // encerra o programa caso seja a task main
+    if (curr->id == MAIN_PID)
     {
         curr->status = TERMINATED;
         exit(SUCESS);
     }
 
-#ifdef DEBUG
-    printf("task_exit: encerrando a task id = %d e retornando para main, id = %d\n", curr->id, main_task.id);
-#endif
-
     curr->status = TERMINATED;
     task_t *prev = curr;
-    curr = &main_task;
 
-    swapcontext(&(prev->context), &(main_task.context));
+    // retorna para main caso seja o dispatcher
+    if (prev->id == DISPATCHER_PID)
+    {
+#ifdef DEBUG
+        printf("task_exit: encerrando o dispatcher e retornando para o main\n");
+#endif
+        curr = &main_task;
+    }
+    else
+    {
+#ifdef DEBUG
+        printf("task_exit: encerrando a task id = %d e retornando para o dispatcher\n", curr->id);
+#endif
+        curr = &dispatcher_task;
+    }
+
+    swapcontext(&(prev->context), &(curr->context));
+}
+
+void task_print(void *elem)
+{
+    task_t *qelem = elem;
+    printf("id: %d status: %d;", qelem->id, qelem->status);
 }
