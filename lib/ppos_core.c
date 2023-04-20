@@ -7,6 +7,28 @@
 
 // #define DEBUG
 
+#define ANSI_RED "\x1b[31m"
+#define ANSI_GREEN "\x1b[32m"
+#define ANSI_YELLOW "\x1b[33m"
+#define ANSI_BLUE "\x1b[34m"
+#define ANSI_MAGENTA "\x1b[35m"
+#define ANSI_CYAN "\x1b[36m"
+#define ANSI_RESET "\x1b[0m"
+
+// debug message macro
+#ifdef DEBUG
+#define DEBUG_MSG(...)            \
+    fprintf(stderr, ANSI_YELLOW); \
+    fprintf(stderr, __VA_ARGS__); \
+    fprintf(stderr, ANSI_RESET);
+
+// evita warning "state with no effect"
+#else
+#define DEBUG_MSG(...) \
+    while (0)          \
+        ;
+#endif
+
 task_t main_task;
 task_t dispatcher_task;              // tarefa do dispatcher
 unsigned long long next_task_id = 0; // id da proxima tarefa a ser criada
@@ -21,23 +43,19 @@ void task_print(void *elem);
 
 void ppos_init()
 {
-#ifdef DEBUG
-    printf("ppos_init: iniciando o SO\n");
-#endif
+    DEBUG_MSG("ppos_init: inicializando o SO\n");
 
     // desativa o buffer da saida padrao (stdout), usado pela função printf
     setvbuf(stdout, 0, _IONBF, 0);
 
     dispatcher_init();
-#ifdef DEBUG
-    printf("ppos_init: dispatcher inicializado\n");
-#endif
+
+    DEBUG_MSG("ppos_init: dispatcher inicializado\n");
 
     task_init(&main_task, NULL, NULL);
     curr = &main_task;
-#ifdef DEBUG
-    printf("ppos_init: task main iniciada, id = %d\n", main_task.id);
-#endif
+
+    DEBUG_MSG("ppos_init: task main iniciada, id = %d\n", main_task.id);
 }
 
 void dispatcher_init(void)
@@ -71,23 +89,31 @@ void dispatcher_init(void)
 
 task_t *scheduler(void)
 {
+
+    DEBUG_MSG("scheduler: procurando nova task\n");
 #ifdef DEBUG
-    printf("scheduler: procurando nova task\n");
+    printf(ANSI_MAGENTA);
     queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
+    printf(ANSI_RESET);
 #endif
 
     task_t *next = user_tasks;
-    user_tasks = (task_t *)user_tasks->next;
+    user_tasks = (task_t *)user_tasks->next; // task vai para o final da fila
 
-#ifdef DEBUG
-    printf("scheduler: envelecendo as tasks\n");
-#endif
+    DEBUG_MSG("scheduler: envelecendo as tasks\n");
 
     task_t *aux = user_tasks;
     while (aux->next != user_tasks)
     {
+        if (aux->dynamic_priority < next->dynamic_priority)
+        {
+            next = aux;
+        }
         aux->dynamic_priority += ALPHA;
+        aux = aux->next;
     }
+
+    DEBUG_MSG("scheduler: task escolhida %d com prio %d\n", next->id, next->dynamic_priority);
 
     return next;
 }
@@ -96,15 +122,12 @@ void dispatcher(void)
 {
     while (queue_size((queue_t *)user_tasks) > 0)
     {
-#ifdef DEBUG
-        printf("dispatcher: recebendo o controle\n");
-#endif
+
+        DEBUG_MSG("dispatcher: recebendo o controle\n");
 
         task_t *next = scheduler();
 
-#ifdef DEBUG
-        printf("dispatcher: proxima task %p\n", next);
-#endif
+        DEBUG_MSG("dispatcher: proxima task %d\n", next->id);
 
         if (next)
         {
@@ -136,9 +159,8 @@ void dispatcher(void)
 
 int task_init(task_t *task, void (*start_routine)(void *), void *arg)
 {
-#ifdef DEBUG
-    printf("task_init: iniciando nova task...\n");
-#endif
+
+    DEBUG_MSG("task_init: iniciando nova task...\n");
 
     getcontext(&(task->context));
 
@@ -164,25 +186,21 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     task->status = READY;
     task->prev = task->next = NULL;
     task->static_priority = DEFAULT_PRIORITY;
+    task->dynamic_priority = DEFAULT_PRIORITY;
 
-#ifdef DEBUG
-    printf("task_init: adicionando na fila...\n");
-#endif
+    DEBUG_MSG("task_init: adicionando na fila...\n");
 
     queue_append((queue_t **)&user_tasks, (queue_t *)task);
 
-#ifdef DEBUG
-    printf("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
-#endif
+    DEBUG_MSG("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
 
     return task->id;
 }
 
 void task_yield()
 {
-#ifdef DEBUG
-    printf("task_yield: taks id = %d passou o controle para o dispatcher\n", curr->id);
-#endif
+
+    DEBUG_MSG("task_yield: taks id = %d passou o controle para o dispatcher\n", curr->id);
 
     task_switch(&dispatcher_task);
 }
@@ -200,9 +218,7 @@ int task_switch(task_t *task)
         exit(NULL_PTR_ERROR);
     }
 
-#ifdef DEBUG
-    printf("task_switch: trocando de task id = %d para id = %d\n", curr->id, task->id);
-#endif
+    DEBUG_MSG("task_switch: trocando de task id = %d para id = %d\n", curr->id, task->id);
 
     curr->status = SUSPENDED;
     curr->dynamic_priority = curr->static_priority;
@@ -221,16 +237,16 @@ void task_exit(int exit_code)
     // retorna para main caso seja o dispatcher
     if (prev->id == DISPATCHER_PID)
     {
-#ifdef DEBUG
-        printf("task_exit: task dispatcher finalizada, encerrando o SO\n");
-#endif
+
+        DEBUG_MSG("task_exit: task dispatcher finalizada, encerrando o SO\n");
+
         exit(EXIT_SUCCESS);
     }
     else
     {
-#ifdef DEBUG
-        printf("task_exit: encerrando a task id = %d e retornando para o dispatcher\n", curr->id);
-#endif
+
+        DEBUG_MSG("task_exit: encerrando a task id = %d e retornando para o dispatcher\n", curr->id);
+
         queue_remove((queue_t **)&user_tasks, (queue_t *)prev);
         curr = &dispatcher_task;
     }
@@ -240,42 +256,39 @@ void task_exit(int exit_code)
 
 void task_setprio(task_t *task, int prio)
 {
-#ifdef DEBUG
-    printf("task_setprio: definindo prioridade");
-#endif
+
+    DEBUG_MSG("task_setprio: definindo prioridade\n");
 
     if (!task)
     {
-        perror("Ponteiro inválido");
-        exit(NULL_PTR_ERROR);
+        task = curr;
+        DEBUG_MSG("task_setprio: definindo prioridade da task atual id = %d\n", task->id);
     }
 
-#ifdef DEBUG
-    printf("task_setprio: definido prioridade da task id = %d para %d\n", task->id, prio);
-#endif
+    DEBUG_MSG("task_setprio: definido prioridade da task id = %d para %d\n", task->id, prio);
 
     task->static_priority = prio;
+    task->dynamic_priority = prio;
 }
 
 int task_getprio(task_t *task)
 {
-#ifdef DEBUG
-    printf("task_getprio: obtendo prioridade");
-#endif
+
+    DEBUG_MSG("task_getprio: obtendo prioridade\n");
 
     if (!task)
     {
-        perror("Ponteiro inválido");
-        exit(NULL_PTR_ERROR);
+        task = curr;
+        DEBUG_MSG("task_getprio: obtendo prioridade da task atual id = %d\n", task->id);
     }
-#ifdef DEBUG
-    printf("task_getprio: retornando prioridade da task id = %d\n", task->id);
-#endif
+
+    DEBUG_MSG("task_getprio: retornando prioridade da task id = %d\n", task->id);
+
     return task->static_priority;
 }
 
 void task_print(void *elem)
 {
     task_t *qelem = elem;
-    printf("id: %d status: %d;", qelem->id, qelem->status);
+    printf("id: %d status: %d prio: %d;", qelem->id, qelem->status, qelem->dynamic_priority);
 }
