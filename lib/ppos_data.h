@@ -14,6 +14,11 @@
 #define MAIN_PID 0
 #define DISPATCHER_PID -1
 
+#define MIN_PRIORITY 20
+#define DEFAULT_PRIORITY 0
+#define MAX_PRIORITY -20
+#define ALPHA -1
+
 // status das tasks atuais
 enum task_state
 {
@@ -37,6 +42,8 @@ typedef struct task_t
   int id;                     // identificador da tarefa
   ucontext_t context;         // contexto armazenado da tarefa
   short status;               // pronta, rodando, suspensa, ...
+  short static_priority;      // prioridade estática da tarefa
+  short dynamic_priority;     // prioridade dinâmica da tarefa
   // ... (outros campos serão adicionados mais tarde)
 } task_t;
 

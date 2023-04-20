@@ -57,7 +57,7 @@ void dispatcher_init(void)
     else
     {
         perror("Erro na criação da pilha para o dispatcher: ");
-        exit(EXIT_FAILURE);
+        exit(STACK_CREATION_ERROR);
     }
 
     makecontext(&(dispatcher_task.context), (void *)(dispatcher), 1, NULL);
@@ -65,6 +65,7 @@ void dispatcher_init(void)
     // atualiza informacoes gerenciais
     dispatcher_task.id = DISPATCHER_PID;
     dispatcher_task.status = RUNNING;
+    dispatcher_task.static_priority = MAX_PRIORITY;
     dispatcher_task.prev = dispatcher_task.next = NULL;
 }
 
@@ -77,6 +78,16 @@ task_t *scheduler(void)
 
     task_t *next = user_tasks;
     user_tasks = (task_t *)user_tasks->next;
+
+#ifdef DEBUG
+    printf("scheduler: envelecendo as tasks\n");
+#endif
+
+    task_t *aux = user_tasks;
+    while (aux->next != user_tasks)
+    {
+        aux->dynamic_priority += ALPHA;
+    }
 
     return next;
 }
@@ -111,7 +122,7 @@ void dispatcher(void)
                 /* code */
                 break;
             case RUNNING:
-
+                /* code */
                 break;
 
             default:
@@ -143,7 +154,7 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     else
     {
         perror("Erro na criação da pilha: ");
-        return STACK_CREATION_ERROR;
+        exit(STACK_CREATION_ERROR);
     }
 
     makecontext(&(task->context), (void *)(*start_routine), 1, arg);
@@ -152,6 +163,7 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     task->id = next_task_id++;
     task->status = READY;
     task->prev = task->next = NULL;
+    task->static_priority = DEFAULT_PRIORITY;
 
 #ifdef DEBUG
     printf("task_init: adicionando na fila...\n");
@@ -185,7 +197,7 @@ int task_switch(task_t *task)
     if (!task)
     {
         perror("Ponteiro inválido");
-        return NULL_PTR_ERROR;
+        exit(NULL_PTR_ERROR);
     }
 
 #ifdef DEBUG
@@ -193,6 +205,7 @@ int task_switch(task_t *task)
 #endif
 
     curr->status = SUSPENDED;
+    curr->dynamic_priority = curr->static_priority;
     task->status = RUNNING;
 
     task_t *prev = curr;
@@ -223,6 +236,42 @@ void task_exit(int exit_code)
     }
 
     swapcontext(&(prev->context), &(curr->context));
+}
+
+void task_setprio(task_t *task, int prio)
+{
+#ifdef DEBUG
+    printf("task_setprio: definindo prioridade");
+#endif
+
+    if (!task)
+    {
+        perror("Ponteiro inválido");
+        exit(NULL_PTR_ERROR);
+    }
+
+#ifdef DEBUG
+    printf("task_setprio: definido prioridade da task id = %d para %d\n", task->id, prio);
+#endif
+
+    task->static_priority = prio;
+}
+
+int task_getprio(task_t *task)
+{
+#ifdef DEBUG
+    printf("task_getprio: obtendo prioridade");
+#endif
+
+    if (!task)
+    {
+        perror("Ponteiro inválido");
+        exit(NULL_PTR_ERROR);
+    }
+#ifdef DEBUG
+    printf("task_getprio: retornando prioridade da task id = %d\n", task->id);
+#endif
+    return task->static_priority;
 }
 
 void task_print(void *elem)
