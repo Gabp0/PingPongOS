@@ -12,7 +12,7 @@
 #define STACKSIZE 64 * 1024 // tamanho de pilha das threads
 
 #define MAIN_PID 0
-#define DISPATCHER_PID 1
+#define DISPATCHER_PID -1
 
 // status das tasks atuais
 enum task_state
@@ -26,8 +26,7 @@ enum task_state
 // error exit codes
 enum error_codes
 {
-  SUCESS,
-  STACK_CREATION_ERROR,
+  STACK_CREATION_ERROR = 2,
   NULL_PTR_ERROR
 };
 

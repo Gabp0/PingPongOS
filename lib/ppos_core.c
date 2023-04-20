@@ -9,35 +9,63 @@
 
 task_t main_task;
 task_t dispatcher_task;              // tarefa do dispatcher
-unsigned long long last_task_id = 0; // id da ultima tarefa criada
+unsigned long long next_task_id = 0; // id da proxima tarefa a ser criada
 task_t *curr = NULL;                 // task atualmente rodando
 task_t *user_tasks = NULL;           // fila de tarefas do usuario
 
 // declaracoes de prototipos de funcoes privadas
+void dispatcher_init(void);
 void dispatcher(void);
 task_t *scheduler(void);
 void task_print(void *elem);
 
 void ppos_init()
 {
+#ifdef DEBUG
+    printf("ppos_init: iniciando o SO\n");
+#endif
+
     // desativa o buffer da saida padrao (stdout), usado pela função printf
     setvbuf(stdout, 0, _IONBF, 0);
 
-    // inicia a tarefa main
-    main_task.id = MAIN_PID;
-    main_task.status = RUNNING;
-    curr = &main_task;
+    dispatcher_init();
+#ifdef DEBUG
+    printf("ppos_init: dispatcher inicializado\n");
+#endif
 
+    task_init(&main_task, NULL, NULL);
+    curr = &main_task;
 #ifdef DEBUG
     printf("ppos_init: task main iniciada, id = %d\n", main_task.id);
 #endif
+}
 
-#ifdef DEBUG
-    printf("ppos_init: inicializando o dispatcher\n");
-#endif
-
+void dispatcher_init(void)
+{
     // inicia a tarefa dispatcher
-    task_init(&dispatcher_task, (void *)dispatcher, NULL);
+    getcontext(&(dispatcher_task.context));
+
+    // inicializa a pilha da tarefa
+    char *stack = malloc(STACKSIZE);
+    if (stack)
+    {
+        dispatcher_task.context.uc_stack.ss_sp = stack;
+        dispatcher_task.context.uc_stack.ss_size = STACKSIZE;
+        dispatcher_task.context.uc_stack.ss_flags = 0;
+        dispatcher_task.context.uc_link = 0;
+    }
+    else
+    {
+        perror("Erro na criação da pilha para o dispatcher: ");
+        exit(EXIT_FAILURE);
+    }
+
+    makecontext(&(dispatcher_task.context), (void *)(dispatcher), 1, NULL);
+
+    // atualiza informacoes gerenciais
+    dispatcher_task.id = DISPATCHER_PID;
+    dispatcher_task.status = RUNNING;
+    dispatcher_task.prev = dispatcher_task.next = NULL;
 }
 
 task_t *scheduler(void)
@@ -48,7 +76,7 @@ task_t *scheduler(void)
 #endif
 
     task_t *next = user_tasks;
-    queue_remove((queue_t **)&user_tasks, (queue_t *)next);
+    user_tasks = (task_t *)user_tasks->next;
 
     return next;
 }
@@ -121,7 +149,7 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     makecontext(&(task->context), (void *)(*start_routine), 1, arg);
 
     // atualiza informacoes gerenciais
-    task->id = ++last_task_id;
+    task->id = next_task_id++;
     task->status = READY;
     task->prev = task->next = NULL;
 
@@ -143,12 +171,6 @@ void task_yield()
 #ifdef DEBUG
     printf("task_yield: taks id = %d passou o controle para o dispatcher\n", curr->id);
 #endif
-
-    // nao coloca o main de volta na fila
-    if (curr->id != 0)
-    {
-        queue_append((queue_t **)&user_tasks, (queue_t *)curr);
-    }
 
     task_switch(&dispatcher_task);
 }
@@ -180,13 +202,6 @@ int task_switch(task_t *task)
 
 void task_exit(int exit_code)
 {
-    // encerra o programa caso seja a task main
-    if (curr->id == MAIN_PID)
-    {
-        curr->status = TERMINATED;
-        exit(SUCESS);
-    }
-
     curr->status = TERMINATED;
     task_t *prev = curr;
 
@@ -194,15 +209,16 @@ void task_exit(int exit_code)
     if (prev->id == DISPATCHER_PID)
     {
 #ifdef DEBUG
-        printf("task_exit: encerrando o dispatcher e retornando para o main\n");
+        printf("task_exit: task dispatcher finalizada, encerrando o SO\n");
 #endif
-        curr = &main_task;
+        exit(EXIT_SUCCESS);
     }
     else
     {
 #ifdef DEBUG
         printf("task_exit: encerrando a task id = %d e retornando para o dispatcher\n", curr->id);
 #endif
+        queue_remove((queue_t **)&user_tasks, (queue_t *)prev);
         curr = &dispatcher_task;
     }
 
