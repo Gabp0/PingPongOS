@@ -21,7 +21,8 @@
 #define DEBUG_MSG(...)            \
     fprintf(stderr, ANSI_YELLOW); \
     fprintf(stderr, __VA_ARGS__); \
-    fprintf(stderr, ANSI_RESET);
+    fprintf(stderr, ANSI_RESET);  \
+    fflush(stderr);
 
 // evita warning "state with no effect"
 #else
@@ -32,12 +33,13 @@
 
 task_t main_task;
 task_t dispatcher_task;              // tarefa do dispatcher
-unsigned long long next_task_id = 0; // id da proxima tarefa a ser criada
+unsigned long long last_task_id = 0; // id da ultima tarefa criada
 task_t *curr = NULL;                 // task atualmente rodando
 task_t *user_tasks = NULL;           // fila de tarefas do usuario
 
 // declaracoes de prototipos de funcoes privadas
 void dispatcher_init(void);
+void main_init(void);
 void dispatcher(void);
 task_t *scheduler(void);
 void task_print(void *elem);
@@ -50,18 +52,33 @@ void ppos_init()
     setvbuf(stdout, 0, _IONBF, 0);
 
     dispatcher_init();
-
     DEBUG_MSG("ppos_init: dispatcher inicializado\n");
 
-    task_init(&main_task, NULL, NULL);
-    curr = &main_task;
-
+    main_init();
     DEBUG_MSG("ppos_init: task main iniciada, id = %d\n", main_task.id);
+}
+
+void main_init(void)
+{
+    DEBUG_MSG("main_init: inicializando a main\n");
+    getcontext(&(main_task.context));
+
+    // atualiza informacoes gerenciais
+    main_task.id = MAIN_PID;
+    main_task.status = READY;
+    main_task.prev = main_task.next = NULL;
+    main_task.static_priority = DEFAULT_PRIORITY;
+    main_task.dynamic_priority = DEFAULT_PRIORITY;
+
+    DEBUG_MSG("main_init: adicionando na fila...\n");
+
+    queue_append((queue_t **)&user_tasks, (queue_t *)&main_task);
+    curr = &main_task;
 }
 
 void dispatcher_init(void)
 {
-    // inicia a tarefa dispatcher
+    DEBUG_MSG("dispatcher_init: inicializando o dispatcher\n");
     getcontext(&(dispatcher_task.context));
 
     // inicializa a pilha da tarefa
@@ -97,23 +114,34 @@ task_t *scheduler(void)
     queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
     printf(ANSI_RESET);
 #endif
+    // ??????????????????
+    // user_tasks = (task_t *)user_tasks->next; // task vai para o final da fila
 
+    task_t *aux;
     task_t *next = user_tasks;
-    user_tasks = (task_t *)user_tasks->next; // task vai para o final da fila
 
     DEBUG_MSG("scheduler: envelecendo as tasks\n");
+    aux = user_tasks;
+    while (aux->next != user_tasks)
+    {
+        aux->dynamic_priority += ALPHA;
+        aux = aux->next;
+    }
+    aux->dynamic_priority += ALPHA;
 
-    task_t *aux = user_tasks;
+    aux = user_tasks;
     while (aux->next != user_tasks)
     {
         if (aux->dynamic_priority < next->dynamic_priority)
         {
             next = aux;
         }
-        aux->dynamic_priority += ALPHA;
         aux = aux->next;
     }
-
+    if (aux->dynamic_priority < next->dynamic_priority)
+    {
+        next = aux;
+    }
     DEBUG_MSG("scheduler: task escolhida %d com prio %d\n", next->id, next->dynamic_priority);
 
     return next;
@@ -183,7 +211,7 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     makecontext(&(task->context), (void *)(*start_routine), 1, arg);
 
     // atualiza informacoes gerenciais
-    task->id = next_task_id++;
+    task->id = ++last_task_id;
     task->status = READY;
     task->prev = task->next = NULL;
     task->static_priority = DEFAULT_PRIORITY;
@@ -200,7 +228,7 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
 
 void task_yield()
 {
-
+    DEBUG_MSG("task_yield: recebendo o controle\n")
     DEBUG_MSG("task_yield: taks id = %d passou o controle para o dispatcher\n", curr->id);
 
     task_switch(&dispatcher_task);
