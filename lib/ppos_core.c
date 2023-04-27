@@ -114,35 +114,27 @@ task_t *scheduler(void)
     queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
     printf(ANSI_RESET);
 #endif
-    // ??????????????????
-    // user_tasks = (task_t *)user_tasks->next; // task vai para o final da fila
-
-    task_t *aux;
+    
+    task_t *aux = user_tasks;
     task_t *next = user_tasks;
 
-    DEBUG_MSG("scheduler: envelecendo as tasks\n");
-    aux = user_tasks;
-    while (aux->next != user_tasks)
-    {
-        aux->dynamic_priority += ALPHA;
-        aux = aux->next;
-    }
-    aux->dynamic_priority += ALPHA;
-
-    aux = user_tasks;
-    while (aux->next != user_tasks)
+    DEBUG_MSG("scheduler: envelecendo as tasks e esolhendo a proxima\n");
+    do
     {
         if (aux->dynamic_priority < next->dynamic_priority)
         {
             next = aux;
         }
+        aux->dynamic_priority += ALPHA;
         aux = aux->next;
+    
     }
-    if (aux->dynamic_priority < next->dynamic_priority)
-    {
-        next = aux;
-    }
+    while (aux->next != user_tasks)
+   
     DEBUG_MSG("scheduler: task escolhida %d com prio %d\n", next->id, next->dynamic_priority);
+
+    // task vai para o final da fila
+    user_tasks = (task_t *)user_tasks->next;
 
     return next;
 }
