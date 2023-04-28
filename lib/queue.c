@@ -83,11 +83,7 @@ int queue_append(queue_t **queue, queue_t *elem)
     }
 
     // percorre a fila
-    queue_t *aux = *queue;
-    while (aux->next != *queue)
-    {
-        aux = aux->next;
-    }
+    queue_t *aux = (*queue)->prev;
 
     // insere elemento no final da fila
     aux->next = elem;

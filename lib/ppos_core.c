@@ -109,32 +109,44 @@ task_t *scheduler(void)
 {
 
     DEBUG_MSG("scheduler: procurando nova task\n");
+
 #ifdef DEBUG
     printf(ANSI_MAGENTA);
     queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
     printf(ANSI_RESET);
 #endif
-    
+
     task_t *aux = user_tasks;
     task_t *next = user_tasks;
-
-    DEBUG_MSG("scheduler: envelecendo as tasks e esolhendo a proxima\n");
     do
     {
         if (aux->dynamic_priority < next->dynamic_priority)
         {
             next = aux;
         }
-        aux->dynamic_priority += ALPHA;
         aux = aux->next;
-    
-    }
-    while (aux->next != user_tasks)
-   
+
+    } while (aux != user_tasks);
     DEBUG_MSG("scheduler: task escolhida %d com prio %d\n", next->id, next->dynamic_priority);
 
+    DEBUG_MSG("scheduler: envelecendo as tasks\n");
+    aux = user_tasks;
+    do
+    {
+        aux->dynamic_priority += ALPHA;
+        aux = aux->next;
+
+    } while (aux != user_tasks);
+#ifdef DEBUG
+    printf(ANSI_MAGENTA);
+    queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
+    printf(ANSI_RESET);
+#endif
+
     // task vai para o final da fila
-    user_tasks = (task_t *)user_tasks->next;
+    // user_tasks = user_tasks->next;
+    // reseta a prioridade
+    next->dynamic_priority = next->static_priority;
 
     return next;
 }
@@ -242,7 +254,6 @@ int task_switch(task_t *task)
     DEBUG_MSG("task_switch: trocando de task id = %d para id = %d\n", curr->id, task->id);
 
     curr->status = SUSPENDED;
-    curr->dynamic_priority = curr->static_priority;
     task->status = RUNNING;
 
     task_t *prev = curr;
