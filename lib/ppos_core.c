@@ -1,12 +1,15 @@
 // GRR20203895 Gabriel de Oliveira Pontarolo
+
+#define _XOPEN_SOURCE 700 /* Single UNIX Specification, Version 4 */
+
 #include "ppos.h"
 #include "ppos_data.h"
 #include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ucontext.h>
-
-// #define DEBUG
+#include <signal.h>
+#include <sys/time.h>
 
 #define ANSI_RED "\x1b[31m"
 #define ANSI_GREEN "\x1b[32m"
@@ -15,6 +18,8 @@
 #define ANSI_MAGENTA "\x1b[35m"
 #define ANSI_CYAN "\x1b[36m"
 #define ANSI_RESET "\x1b[0m"
+
+// #define DEBUG
 
 // debug message macro
 #ifdef DEBUG
@@ -37,12 +42,18 @@ unsigned long long last_task_id = 0; // id da ultima tarefa criada
 task_t *curr = NULL;                 // task atualmente rodando
 task_t *user_tasks = NULL;           // fila de tarefas do usuario
 
+struct sigaction action; // estrutura que define um tratador de sinal (deve ser global ou static)
+struct itimerval timer;  // estrutura de inicialização do timer
+int clock_ticks = 0;     // numero atual de ticks do relogio
+
 // declaracoes de prototipos de funcoes privadas
 void dispatcher_init(void);
 void main_init(void);
 void dispatcher(void);
 task_t *scheduler(void);
 void task_print(void *elem);
+void timer_init();
+void interruption_handler(int signum);
 
 void ppos_init()
 {
@@ -56,6 +67,53 @@ void ppos_init()
 
     main_init();
     DEBUG_MSG("ppos_init: task main iniciada, id = %d\n", main_task.id);
+
+    timer_init();
+    DEBUG_MSG("ppos_init: timer e tratador de interrupcoes inicializados\n");
+}
+
+void interruption_handler(int signum)
+{
+    clock_ticks++;
+    if (clock_ticks == QUANTUM)
+    {
+        DEBUG_MSG("interruption_handler: fim de quantum, fazendo preempcao por tempo\n")
+        clock_ticks = 0;
+        if (curr->id == DISPATCHER_PID)
+        {
+            DEBUG_MSG("interruption_handler: dispatcher nao pode ser preemptado\n")
+            return;
+        }
+        task_yield();
+    }
+}
+
+void timer_init()
+{
+    // define o tratador para SIGALRM
+    DEBUG_MSG("timer_init: definindo o tratador de interrupcoes\n");
+    action.sa_handler = interruption_handler;
+    sigemptyset(&action.sa_mask);
+    action.sa_flags = 0;
+    if (sigaction(SIGALRM, &action, 0) < 0)
+    {
+        perror("Erro em sigaction: ");
+        exit(INTERRUPTION_INIT_ERROR);
+    }
+
+    // ajusta valores do temporizador
+    timer.it_value.tv_usec = 1;              // primeiro disparo, em micro-segundos
+    timer.it_value.tv_sec = 0;               // primeiro disparo, em segundos
+    timer.it_interval.tv_usec = TIMER_TICKS; // disparos subsequentes, em micro-segundos
+    timer.it_interval.tv_sec = 0;            // disparos subsequentes, em segundos
+
+    // arma o temporizador ITIMER_REAL
+    DEBUG_MSG("timer_init: armando o timer\n");
+    if (setitimer(ITIMER_REAL, &timer, 0) < 0)
+    {
+        perror("Erro em setitimer: ");
+        exit(INTERRUPTION_INIT_ERROR);
+    }
 }
 
 void main_init(void)
@@ -111,9 +169,9 @@ task_t *scheduler(void)
     DEBUG_MSG("scheduler: procurando nova task\n");
 
 #ifdef DEBUG
-    printf(ANSI_MAGENTA);
+    fprintf(stderr, ANSI_MAGENTA);
     queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
-    printf(ANSI_RESET);
+    fprintf(stderr, ANSI_RESET);
 #endif
 
     task_t *aux = user_tasks;
@@ -138,9 +196,9 @@ task_t *scheduler(void)
 
     } while (aux != user_tasks);
 #ifdef DEBUG
-    printf(ANSI_MAGENTA);
+    fprintf(stderr, ANSI_MAGENTA);
     queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
-    printf(ANSI_RESET);
+    fprintf(stderr, ANSI_RESET);
 #endif
 
     // task vai para o final da fila
@@ -322,5 +380,5 @@ int task_getprio(task_t *task)
 void task_print(void *elem)
 {
     task_t *qelem = elem;
-    printf("id: %d status: %d prio: %d;", qelem->id, qelem->status, qelem->dynamic_priority);
+    fprintf(stderr, "id: %d status: %d prio: %d;", qelem->id, qelem->status, qelem->dynamic_priority);
 }

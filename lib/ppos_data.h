@@ -1,7 +1,9 @@
 // GRR20203895 Gabriel de Oliveira Pontarolo
+
 // PingPongOS - PingPong Operating System
 // Prof. Carlos A. Maziero, DINF UFPR
 // Versão 1.5 -- Março de 2023
+// Modificado por Gabriel Pontarolo
 
 // Estruturas de dados internas do sistema operacional
 
@@ -20,6 +22,9 @@
 #define MAX_PRIORITY -20
 #define ALPHA -1
 
+#define TIMER_TICKS 1000 // em microssegundos (1 milissegundo)
+#define QUANTUM 20
+
 // status das tasks atuais
 enum task_state
 {
@@ -33,7 +38,8 @@ enum task_state
 enum error_codes
 {
   STACK_CREATION_ERROR = 2,
-  NULL_PTR_ERROR
+  NULL_PTR_ERROR,
+  INTERRUPTION_INIT_ERROR,
 };
 
 // Estrutura que define um Task Control Block (TCB)

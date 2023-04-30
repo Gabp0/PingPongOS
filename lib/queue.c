@@ -34,7 +34,7 @@ int queue_size(queue_t *queue)
 void queue_print(char *name, queue_t *queue, void print_elem(void *))
 // imprime a fila de acordo com print_elem
 {
-    printf("%s: [", name);
+    fprintf(stderr, "%s: [", name);
 
     if (queue != NULL) // se nao vazia
     {
@@ -43,13 +43,13 @@ void queue_print(char *name, queue_t *queue, void print_elem(void *))
         while (aux->next != queue)
         {
             print_elem(aux);
-            printf(" ");
+            fprintf(stderr, " ");
             aux = aux->next;
         }
         print_elem(aux);
     }
 
-    printf("]\n");
+    fprintf(stderr, "]\n");
 }
 
 int queue_append(queue_t **queue, queue_t *elem)
