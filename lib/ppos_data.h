@@ -23,7 +23,7 @@
 #define ALPHA -1
 
 #define TIMER_TICKS 1000 // em microssegundos (1 milissegundo)
-#define QUANTUM 20
+#define QUANTUM 10
 
 // status das tasks atuais
 enum task_state
@@ -46,11 +46,18 @@ enum error_codes
 typedef struct task_t
 {
   struct task_t *prev, *next; // ponteiros para usar em filas
-  int id;                     // identificador da tarefa
-  ucontext_t context;         // contexto armazenado da tarefa
-  short status;               // pronta, rodando, suspensa, ...
-  short dynamic_priority;     // prioridade dinâmica da tarefa
-  short static_priority;      // prioridade estática da tarefa
+
+  int id;             // identificador da tarefa
+  ucontext_t context; // contexto armazenado da tarefa
+  short status;       // pronta, rodando, suspensa, ...
+
+  short dynamic_priority; // prioridade dinâmica da tarefa
+  short static_priority;  // prioridade estática da tarefa
+
+  unsigned int execution_time; // tempo desde a criacao da tarefa
+  unsigned int processor_time; // tempo passado executando
+  unsigned int activations; // numero de vezes em que foi feito task_switch para ela
+
   // ... (outros campos serão adicionados mais tarde)
 } task_t;
 

@@ -1,6 +1,7 @@
 // GRR20203895 Gabriel de Oliveira Pontarolo
 
-#define _XOPEN_SOURCE 700 /* Single UNIX Specification, Version 4 */
+#define _XOPEN_SOURCE 600 /* Single UNIX Specification, Version 3 */
+// vscode reclamava das funcoes da lib signal.h sem essa definicao
 
 #include "ppos.h"
 #include "ppos_data.h"
@@ -46,6 +47,8 @@ struct sigaction action; // estrutura que define um tratador de sinal (deve ser 
 struct itimerval timer;  // estrutura de inicialização do timer
 int clock_ticks = 0;     // numero atual de ticks do relogio
 
+unsigned int sysclock = 0; // relogio do sistema (em ms)
+
 // declaracoes de prototipos de funcoes privadas
 void dispatcher_init(void);
 void main_init(void);
@@ -74,6 +77,7 @@ void ppos_init()
 
 void interruption_handler(int signum)
 {
+    sysclock++;
     clock_ticks++;
     if (clock_ticks == QUANTUM)
     {
@@ -127,6 +131,9 @@ void main_init(void)
     main_task.prev = main_task.next = NULL;
     main_task.static_priority = DEFAULT_PRIORITY;
     main_task.dynamic_priority = DEFAULT_PRIORITY;
+    main_task.activations = 1;
+    main_task.execution_time = systime();
+    main_task.processor_time = 0;
 
     DEBUG_MSG("main_init: adicionando na fila...\n");
 
@@ -161,6 +168,9 @@ void dispatcher_init(void)
     dispatcher_task.status = RUNNING;
     dispatcher_task.static_priority = MAX_PRIORITY;
     dispatcher_task.prev = dispatcher_task.next = NULL;
+    main_task.activations = 0;
+    main_task.execution_time = systime();
+    main_task.processor_time = 0;
 }
 
 task_t *scheduler(void)
@@ -215,6 +225,7 @@ void dispatcher(void)
     {
 
         DEBUG_MSG("dispatcher: recebendo o controle\n");
+        dispatcher_task.activations++;
 
         task_t *next = scheduler();
 
@@ -222,7 +233,10 @@ void dispatcher(void)
 
         if (next)
         {
+            unsigned int start = systime();
+            next->activations++;
             task_switch(next);
+            next->processor_time += systime() - start;
 
             switch (next->status)
             {
@@ -278,6 +292,9 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     task->prev = task->next = NULL;
     task->static_priority = DEFAULT_PRIORITY;
     task->dynamic_priority = DEFAULT_PRIORITY;
+    task->activations = 0;
+    task->execution_time = systime();
+    task->processor_time = 0;
 
     DEBUG_MSG("task_init: adicionando na fila...\n");
 
@@ -323,6 +340,10 @@ void task_exit(int exit_code)
 {
     curr->status = TERMINATED;
     task_t *prev = curr;
+    curr->execution_time = systime() - curr->execution_time;
+
+    fprintf(stdout, "Task %d exit: execution time %d ms, processor time %d ms, %d activations\n", curr->id, curr->execution_time, curr->processor_time, curr->activations);
+    fflush(stdout);
 
     // retorna para main caso seja o dispatcher
     if (prev->id == DISPATCHER_PID)
@@ -375,6 +396,11 @@ int task_getprio(task_t *task)
     DEBUG_MSG("task_getprio: retornando prioridade da task id = %d\n", task->id);
 
     return task->static_priority;
+}
+
+unsigned int systime()
+{
+    return sysclock;
 }
 
 void task_print(void *elem)
