@@ -3,13 +3,10 @@
 #include <stdlib.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <string.h>
 
 #define NUM_THREADS 3
 #define SLEEP_TIME 3
-
-char buffer[4098];
-memset(buffer, 4098, sizeof(char));
-sem_t buffer_s;
 
 typedef struct barrier
 {
@@ -34,19 +31,25 @@ void barrier_wait(barrier *b)
 {
     sem_wait(&(b->size_s));
     b->counter++;
-    printf("c: %d\n", b->counter);
     int is_last = (b->counter == b->size);
-    printf("is _last %d\n", is_last);
+
+    // se e a ultima thread, libera as outras da barreira
     if (is_last)
     {
         printf("--barrier\n");
         fflush(stdout);
+
         b->counter = 0;
-        for (size_t i = 0; i < b->size; i++) {
+        for (size_t i = 0; i < b->size - 1; i++)
+        {
             sem_post(&(b->barrier_s));
         }
+
         sem_post(&(b->size_s));
-    } else {
+    }
+    // se nao, espera as outras chegarem
+    else
+    {
         sem_post(&(b->size_s));
         sem_wait(&(b->barrier_s));
     }
@@ -54,15 +57,20 @@ void barrier_wait(barrier *b)
 
 void *threadBody(void *id)
 {
-    int i = (long) id;
-    
-    while(1)
+    int i = (long)id;
+
+    while (1)
     {
-        sleep(SLEEP_TIME*i + 1);
+        sleep(SLEEP_TIME * i + 1);
+
         printf("%d antes\n", i);
         fflush(stdout);
+
         barrier_wait(&b);
+
         printf("%d depois\n", i);
+        fflush(stdout);
+
         sleep(5);
     }
 
@@ -74,8 +82,6 @@ int main(int argc, char *argv[])
     pthread_t thread[NUM_THREADS];
     pthread_attr_t attr;
     long i, status;
-    
-    sem_init(buffer_s, 0, 1);
 
     // initialize semaphore to 1
     barrier_init(&b, NUM_THREADS);
