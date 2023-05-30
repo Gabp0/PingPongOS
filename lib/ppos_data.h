@@ -51,12 +51,16 @@ typedef struct task_t
   ucontext_t context; // contexto armazenado da tarefa
   short status;       // pronta, rodando, suspensa, ...
 
+  int exit_code; // codigo de saida da tarefa
+
   short dynamic_priority; // prioridade dinâmica da tarefa
   short static_priority;  // prioridade estática da tarefa
 
   unsigned int execution_time; // tempo desde a criacao da tarefa
   unsigned int processor_time; // tempo passado executando
-  unsigned int activations; // numero de vezes em que foi feito task_switch para ela
+  unsigned int activations;    // numero de vezes em que foi feito task_switch para ela
+
+  int waiting_task; // id da tarefa que a tarefa atual está esperando
 
   // ... (outros campos serão adicionados mais tarde)
 } task_t;

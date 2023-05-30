@@ -37,11 +37,14 @@
         ;
 #endif
 
-task_t main_task;
-task_t dispatcher_task;              // tarefa do dispatcher
+task_t main_task;       // tarefa main
+task_t dispatcher_task; // tarefa do dispatcher
+
 unsigned long long last_task_id = 0; // id da ultima tarefa criada
-task_t *curr = NULL;                 // task atualmente rodando
-task_t *user_tasks = NULL;           // fila de tarefas do usuario
+
+task_t *curr = NULL;            // task atualmente rodando
+task_t *ready_tasks = NULL;     // fila de tarefas do usuario
+task_t *suspended_tasks = NULL; // fila de tarefas suspensas
 
 struct sigaction action; // estrutura que define um tratador de sinal (deve ser global ou static)
 struct itimerval timer;  // estrutura de inicialização do timer
@@ -134,10 +137,12 @@ void main_init(void)
     main_task.activations = 1;
     main_task.execution_time = systime();
     main_task.processor_time = 0;
+    main_task.exit_code = 0;
+    main_task.waiting_task = -1;
 
     DEBUG_MSG("main_init: adicionando na fila...\n");
 
-    queue_append((queue_t **)&user_tasks, (queue_t *)&main_task);
+    queue_append((queue_t **)&ready_tasks, (queue_t *)&main_task);
     curr = &main_task;
 }
 
@@ -168,9 +173,17 @@ void dispatcher_init(void)
     dispatcher_task.status = RUNNING;
     dispatcher_task.static_priority = MAX_PRIORITY;
     dispatcher_task.prev = dispatcher_task.next = NULL;
-    main_task.activations = 0;
-    main_task.execution_time = systime();
-    main_task.processor_time = 0;
+    dispatcher_task.activations = 0;
+    dispatcher_task.execution_time = systime();
+    dispatcher_task.processor_time = 0;
+    dispatcher_task.exit_code = 0;
+    dispatcher_task.waiting_task = -1;
+}
+
+void task_print(void *elem)
+{
+    task_t *qelem = elem;
+    fprintf(stderr, "id: %d status: %d prio: %d;", qelem->id, qelem->status, qelem->dynamic_priority);
 }
 
 task_t *scheduler(void)
@@ -180,12 +193,12 @@ task_t *scheduler(void)
 
 #ifdef DEBUG
     fprintf(stderr, ANSI_MAGENTA);
-    queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
+    queue_print("scheduler: ready_tasks", (queue_t *)ready_tasks, (void *)task_print);
     fprintf(stderr, ANSI_RESET);
 #endif
 
-    task_t *aux = user_tasks;
-    task_t *next = user_tasks;
+    task_t *aux = ready_tasks;
+    task_t *next = ready_tasks;
     do
     {
         if (aux->dynamic_priority < next->dynamic_priority)
@@ -194,20 +207,20 @@ task_t *scheduler(void)
         }
         aux = aux->next;
 
-    } while (aux != user_tasks);
+    } while (aux != ready_tasks);
     DEBUG_MSG("scheduler: task escolhida %d com prio %d\n", next->id, next->dynamic_priority);
 
     DEBUG_MSG("scheduler: envelecendo as tasks\n");
-    aux = user_tasks;
+    aux = ready_tasks;
     do
     {
         aux->dynamic_priority += ALPHA;
         aux = aux->next;
 
-    } while (aux != user_tasks);
+    } while (aux != ready_tasks);
 #ifdef DEBUG
     fprintf(stderr, ANSI_MAGENTA);
-    queue_print("scheduler: user_tasks", (queue_t *)user_tasks, (void *)task_print);
+    queue_print("scheduler: ready_tasks", (queue_t *)ready_tasks, (void *)task_print);
     fprintf(stderr, ANSI_RESET);
 #endif
 
@@ -221,7 +234,7 @@ task_t *scheduler(void)
 
 void dispatcher(void)
 {
-    while (queue_size((queue_t *)user_tasks) > 0)
+    while (queue_size((queue_t *)ready_tasks) > 0)
     {
 
         DEBUG_MSG("dispatcher: recebendo o controle\n");
@@ -295,10 +308,12 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     task->activations = 0;
     task->execution_time = systime();
     task->processor_time = 0;
+    task->exit_code = 0;
+    task->waiting_task = -1;
 
     DEBUG_MSG("task_init: adicionando na fila...\n");
 
-    queue_append((queue_t **)&user_tasks, (queue_t *)task);
+    queue_append((queue_t **)&ready_tasks, (queue_t *)task);
 
     DEBUG_MSG("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
 
@@ -341,9 +356,28 @@ void task_exit(int exit_code)
     curr->status = TERMINATED;
     task_t *prev = curr;
     curr->execution_time = systime() - curr->execution_time;
+    curr->exit_code = exit_code;
 
     fprintf(stdout, "Task %d exit: execution time %d ms, processor time %d ms, %d activations\n", curr->id, curr->execution_time, curr->processor_time, curr->activations);
     fflush(stdout);
+
+    DEBUG_MSG("task_exit: acordando as tasks herdadas\n");
+    task_t *aux = suspended_tasks, *next;
+    while (aux && (aux != suspended_tasks->prev))
+    {
+        next = aux->next;
+        if (aux->waiting_task == curr->id)
+        {
+            task_resume(aux, &suspended_tasks);
+            aux->waiting_task = -1;
+        }
+        aux = next;
+    }
+    if (aux && (aux->waiting_task == curr->id)) // ultimo da fila
+    {
+        task_resume(aux, &suspended_tasks);
+        aux->waiting_task = -1;
+    }
 
     // retorna para main caso seja o dispatcher
     if (prev->id == DISPATCHER_PID)
@@ -358,7 +392,7 @@ void task_exit(int exit_code)
 
         DEBUG_MSG("task_exit: encerrando a task id = %d e retornando para o dispatcher\n", curr->id);
 
-        queue_remove((queue_t **)&user_tasks, (queue_t *)prev);
+        queue_remove((queue_t **)&ready_tasks, (queue_t *)prev);
         curr = &dispatcher_task;
     }
 
@@ -403,8 +437,59 @@ unsigned int systime()
     return sysclock;
 }
 
-void task_print(void *elem)
+void task_suspend(task_t **queue)
 {
-    task_t *qelem = elem;
-    fprintf(stderr, "id: %d status: %d prio: %d;", qelem->id, qelem->status, qelem->dynamic_priority);
+    DEBUG_MSG("task_suspend: suspendendo a task id = %d\n", curr->id);
+
+    if (!queue)
+    {
+        perror("Ponteiro inválido");
+        exit(NULL_PTR_ERROR);
+    }
+
+    queue_remove((queue_t **)&ready_tasks, (queue_t *)curr);
+    curr->status = SUSPENDED;
+    queue_append((queue_t **)queue, (queue_t *)curr);
+
+#ifdef DEBUG
+    fprintf(stderr, ANSI_CYAN);
+    queue_print("task_suspend: queue", (queue_t *)*queue, (void *)task_print);
+    fprintf(stderr, ANSI_MAGENTA);
+    queue_print("task_suspend: ready_tasks", (queue_t *)ready_tasks, (void *)task_print);
+    fprintf(stderr, ANSI_RESET);
+#endif
+
+    task_switch(&dispatcher_task);
+}
+
+void task_resume(task_t *task, task_t **queue)
+{
+    DEBUG_MSG("task_resume: resumindo a task id = %d\n", task->id);
+
+    if (!task || !queue)
+    {
+        perror("Ponteiro inválido");
+        exit(NULL_PTR_ERROR);
+    }
+
+    queue_remove((queue_t **)queue, (queue_t *)task);
+    task->status = READY;
+    queue_append((queue_t **)ready_tasks, (queue_t *)task);
+}
+
+int task_wait(task_t *task)
+{
+    DEBUG_MSG("task_wait: task id = %d ira aguardar pela task id = %d\n", curr->id, task->id);
+
+    if (!task || task->status == TERMINATED)
+    {
+        return -1;
+    }
+
+    curr->waiting_task = task->id;
+    task_suspend(&suspended_tasks);
+
+    DEBUG_MSG("task_wait: task id = %d retornou da task id = %d com exit_code = %d\n", curr->id, task->id, task->exit_code);
+
+    return task->exit_code;
 }
