@@ -62,6 +62,8 @@ typedef struct task_t
 
   int waiting_task; // id da tarefa que a tarefa atual está esperando
 
+  unsigned int wake_up_time; // tempo em que a tarefa deve acordar
+
   // ... (outros campos serão adicionados mais tarde)
 } task_t;
 

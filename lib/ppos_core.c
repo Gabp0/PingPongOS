@@ -42,9 +42,12 @@ task_t dispatcher_task; // tarefa do dispatcher
 
 unsigned long long last_task_id = 0; // id da ultima tarefa criada
 
-task_t *curr = NULL;            // task atualmente rodando
+task_t *curr = NULL;    // task atualmente rodando
+int user_tasks_num = 0; // numero de tarefas de usuario no sistema
+
 task_t *ready_tasks = NULL;     // fila de tarefas do usuario
 task_t *suspended_tasks = NULL; // fila de tarefas suspensas
+task_t *sleeping_tasks = NULL;  // fila de tarefas dormindo
 
 struct sigaction action; // estrutura que define um tratador de sinal (deve ser global ou static)
 struct itimerval timer;  // estrutura de inicialização do timer
@@ -143,6 +146,8 @@ void main_init(void)
     DEBUG_MSG("main_init: adicionando na fila...\n");
 
     queue_append((queue_t **)&ready_tasks, (queue_t *)&main_task);
+    user_tasks_num++;
+
     curr = &main_task;
 }
 
@@ -199,25 +204,41 @@ task_t *scheduler(void)
 
     task_t *aux = ready_tasks;
     task_t *next = ready_tasks;
-    do
+    while (aux && (aux != ready_tasks->prev))
     {
         if (aux->dynamic_priority < next->dynamic_priority)
         {
             next = aux;
         }
         aux = aux->next;
+    }
+    if (aux && (aux->dynamic_priority < next->dynamic_priority))
+    {
+        next = aux;
+    }
 
-    } while (aux != ready_tasks);
-    DEBUG_MSG("scheduler: task escolhida %d com prio %d\n", next->id, next->dynamic_priority);
+#ifdef DEBUG
+    if (next)
+    {
+        DEBUG_MSG("scheduler: task escolhida %d com prio %d\n", next->id, next->dynamic_priority);
+    }
+    else
+    {
+        DEBUG_MSG("scheduler: fila de prontos vazia, sem proxima task\n");
+    }
+#endif
 
     DEBUG_MSG("scheduler: envelecendo as tasks\n");
     aux = ready_tasks;
-    do
+    while (aux && (aux != ready_tasks->prev))
     {
         aux->dynamic_priority += ALPHA;
         aux = aux->next;
-
-    } while (aux != ready_tasks);
+    }
+    if (aux)
+    {
+        aux->dynamic_priority += ALPHA;
+    }
 #ifdef DEBUG
     fprintf(stderr, ANSI_MAGENTA);
     queue_print("scheduler: ready_tasks", (queue_t *)ready_tasks, (void *)task_print);
@@ -227,25 +248,65 @@ task_t *scheduler(void)
     // task vai para o final da fila
     // user_tasks = user_tasks->next;
     // reseta a prioridade
-    next->dynamic_priority = next->static_priority;
+    if (next)
+    {
+        next->dynamic_priority = next->static_priority;
+    }
 
     return next;
 }
 
+void wake_tasks(void)
+{
+    task_t *aux = sleeping_tasks, *aux_next;
+    unsigned int now = systime();
+    DEBUG_MSG("wake_tasks: verificando as tasks adormecidas em %d ms\n", now);
+
+#ifdef DEBUG
+    fprintf(stderr, ANSI_GREEN);
+    queue_print("wake_tasks: sleeping_tasks", (queue_t *)sleeping_tasks, (void *)task_print);
+    fprintf(stderr, ANSI_RESET);
+#endif
+
+    while (aux && (aux != sleeping_tasks->prev))
+    {
+        aux_next = aux->next;
+        DEBUG_MSG("wake_tasks: checando task id = %d com wt = %d e now = %d\n", aux->id, aux->wake_up_time, now)
+        if (aux->wake_up_time <= now)
+        {
+            DEBUG_MSG("wake_tasks: acordando task id = %d\n", aux->id)
+            task_resume(aux, &sleeping_tasks);
+        }
+        aux = aux_next;
+    }
+    if (aux && (aux->wake_up_time <= now))
+    {
+        DEBUG_MSG("wake_tasks: acordando task id = %d\n", aux->id)
+        task_resume(aux, &sleeping_tasks);
+    }
+
+#ifdef DEBUG
+    fprintf(stderr, ANSI_MAGENTA);
+    queue_print("wake_tasks: ready_tasks", (queue_t *)ready_tasks, (void *)task_print);
+    fprintf(stderr, ANSI_RESET);
+#endif
+}
+
 void dispatcher(void)
 {
-    while (queue_size((queue_t *)ready_tasks) > 0)
+    while (user_tasks_num > 0)
     {
 
         DEBUG_MSG("dispatcher: recebendo o controle\n");
         dispatcher_task.activations++;
 
-        task_t *next = scheduler();
+        wake_tasks();
 
-        DEBUG_MSG("dispatcher: proxima task %d\n", next->id);
+        task_t *next = scheduler();
 
         if (next)
         {
+            DEBUG_MSG("dispatcher: proxima task %d\n", next->id);
             unsigned int start = systime();
             next->activations++;
             task_switch(next);
@@ -269,6 +330,10 @@ void dispatcher(void)
             default:
                 break;
             }
+        }
+        else
+        {
+            DEBUG_MSG("dispatcher: sem proxima task\n");
         }
     }
 
@@ -314,6 +379,7 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     DEBUG_MSG("task_init: adicionando na fila...\n");
 
     queue_append((queue_t **)&ready_tasks, (queue_t *)task);
+    user_tasks_num++;
 
     DEBUG_MSG("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
 
@@ -393,6 +459,7 @@ void task_exit(int exit_code)
         DEBUG_MSG("task_exit: encerrando a task id = %d e retornando para o dispatcher\n", curr->id);
 
         queue_remove((queue_t **)&ready_tasks, (queue_t *)prev);
+        user_tasks_num--;
         curr = &dispatcher_task;
     }
 
@@ -492,4 +559,11 @@ int task_wait(task_t *task)
     DEBUG_MSG("task_wait: task id = %d retornou da task id = %d com exit_code = %d\n", curr->id, task->id, task->exit_code);
 
     return task->exit_code;
+}
+
+void task_sleep(int t)
+{
+    curr->wake_up_time = systime() + t;
+    DEBUG_MSG("task_sleep: task id = %d ira dormir por %d millisegundos ate %d\n", curr->id, t, curr->wake_up_time);
+    task_suspend(&sleeping_tasks);
 }
