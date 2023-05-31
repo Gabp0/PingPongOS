@@ -112,7 +112,7 @@ void timer_init()
     }
 
     // ajusta valores do temporizador
-    timer.it_value.tv_usec = 1;              // primeiro disparo, em micro-segundos
+    timer.it_value.tv_usec = TIMER_TICKS;    // primeiro disparo, em micro-segundos
     timer.it_value.tv_sec = 0;               // primeiro disparo, em segundos
     timer.it_interval.tv_usec = TIMER_TICKS; // disparos subsequentes, em micro-segundos
     timer.it_interval.tv_sec = 0;            // disparos subsequentes, em segundos
@@ -296,21 +296,26 @@ void dispatcher(void)
 {
     while (user_tasks_num > 0)
     {
-
         DEBUG_MSG("dispatcher: recebendo o controle\n");
-        dispatcher_task.activations++;
-
+        unsigned int dispatcher_start = systime();
         wake_tasks();
-
         task_t *next = scheduler();
 
         if (next)
         {
+            dispatcher_task.activations++;
+
             DEBUG_MSG("dispatcher: proxima task %d\n", next->id);
-            unsigned int start = systime();
             next->activations++;
+
+            dispatcher_task.processor_time += systime() - dispatcher_start; // contador reinicia antes da troca de contexto
+
+            // trocando o contexto para proxima task
+            unsigned int task_start = systime();
             task_switch(next);
-            next->processor_time += systime() - start;
+            next->processor_time += systime() - task_start;
+
+            dispatcher_start = systime();
 
             switch (next->status)
             {
@@ -334,7 +339,10 @@ void dispatcher(void)
         else
         {
             DEBUG_MSG("dispatcher: sem proxima task\n");
+            // sleep(1); // evita busy waiting
         }
+
+        dispatcher_task.processor_time += systime() - dispatcher_start;
     }
 
     task_exit(0);
@@ -541,7 +549,7 @@ void task_resume(task_t *task, task_t **queue)
 
     queue_remove((queue_t **)queue, (queue_t *)task);
     task->status = READY;
-    queue_append((queue_t **)ready_tasks, (queue_t *)task);
+    queue_append((queue_t **)&ready_tasks, (queue_t *)task);
 }
 
 int task_wait(task_t *task)
