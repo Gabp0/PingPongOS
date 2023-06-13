@@ -11,6 +11,7 @@
 #include <ucontext.h>
 #include <signal.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 #define ANSI_RED "\x1b[31m"
 #define ANSI_GREEN "\x1b[32m"
@@ -339,7 +340,7 @@ void dispatcher(void)
         else
         {
             DEBUG_MSG("dispatcher: sem proxima task\n");
-            // sleep(1); // evita busy waiting
+            sleep(1); // evita busy waiting
         }
 
         dispatcher_task.processor_time += systime() - dispatcher_start;
@@ -514,13 +515,13 @@ unsigned int systime()
 
 void task_suspend(task_t **queue)
 {
-    DEBUG_MSG("task_suspend: suspendendo a task id = %d\n", curr->id);
-
     if (!queue)
     {
         perror("Ponteiro inválido");
         exit(NULL_PTR_ERROR);
     }
+
+    DEBUG_MSG("task_suspend: suspendendo a task id = %d\n", curr->id);
 
     queue_remove((queue_t **)&ready_tasks, (queue_t *)curr);
     curr->status = SUSPENDED;
@@ -539,13 +540,13 @@ void task_suspend(task_t **queue)
 
 void task_resume(task_t *task, task_t **queue)
 {
-    DEBUG_MSG("task_resume: resumindo a task id = %d\n", task->id);
-
     if (!task || !queue)
     {
         perror("Ponteiro inválido");
         exit(NULL_PTR_ERROR);
     }
+
+    DEBUG_MSG("task_resume: resumindo a task id = %d\n", task->id);
 
     queue_remove((queue_t **)queue, (queue_t *)task);
     task->status = READY;
@@ -554,12 +555,12 @@ void task_resume(task_t *task, task_t **queue)
 
 int task_wait(task_t *task)
 {
-    DEBUG_MSG("task_wait: task id = %d ira aguardar pela task id = %d\n", curr->id, task->id);
-
     if (!task || task->status == TERMINATED)
     {
         return -1;
     }
+
+    DEBUG_MSG("task_wait: task id = %d ira aguardar pela task id = %d\n", curr->id, task->id);
 
     curr->waiting_task = task->id;
     task_suspend(&suspended_tasks);
@@ -574,4 +575,72 @@ void task_sleep(int t)
     curr->wake_up_time = systime() + t;
     DEBUG_MSG("task_sleep: task id = %d ira dormir por %d millisegundos ate %d\n", curr->id, t, curr->wake_up_time);
     task_suspend(&sleeping_tasks);
+}
+
+int sem_init(semaphore_t *s, int value)
+{
+    if (!s)
+    {
+        return -1;
+    }
+
+    s->value = value;
+    s->queue = NULL;
+    s->exit_code = 0;
+
+    DEBUG_MSG("sem_init: inicializando semaforo de tamanho %d\n", value)
+
+    return 0;
+}
+
+int sem_down(semaphore_t *s)
+{
+    if (!s)
+    {
+        return -1;
+    }
+    DEBUG_MSG("sem_down: task id %d decrementando semafaro\n", curr->id);
+
+    s->value--;
+    if (s->value < 0)
+    {
+        task_suspend(&(s->queue));
+    }
+
+    return 0;
+}
+
+int sem_up(semaphore_t *s)
+{
+    if (!s)
+    {
+        return -1;
+    }
+    DEBUG_MSG("sem_up: task id %d incrementando semafaro\n", curr->id);
+
+    s->value++;
+    if (s->value <= 0)
+    {
+        task_resume(s->queue, &(s->queue));
+    }
+
+    return s->exit_code;
+}
+
+int sem_destroy(semaphore_t *s)
+{
+    if (!s)
+    {
+        return -1;
+    }
+
+    DEBUG_MSG("sem_destroy: destruindo semaforo\n");
+    s->exit_code = -1;
+
+    while (s->queue)
+    {
+        task_resume(s->queue, &(s->queue));
+    }
+
+    return 0;
 }
