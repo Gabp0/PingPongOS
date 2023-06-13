@@ -542,6 +542,7 @@ void task_resume(task_t *task, task_t **queue)
 {
     if (!task || !queue)
     {
+        printf("tas: %p, que: %p\n", task, queue);
         perror("Ponteiro inválido");
         exit(NULL_PTR_ERROR);
     }
@@ -619,7 +620,7 @@ int sem_up(semaphore_t *s)
     DEBUG_MSG("sem_up: task id %d incrementando semafaro\n", curr->id);
 
     s->value++;
-    if (s->value <= 0)
+    if ((s->value <= 0) && s->queue)
     {
         task_resume(s->queue, &(s->queue));
     }
