@@ -28,70 +28,71 @@
 // status das tasks atuais
 enum task_state
 {
-  READY,
-  RUNNING,
-  SUSPENDED,
-  TERMINATED
+    READY,
+    RUNNING,
+    SUSPENDED,
+    TERMINATED
 };
 
 // error exit codes
 enum error_codes
 {
-  STACK_CREATION_ERROR = 2,
-  NULL_PTR_ERROR,
-  INTERRUPTION_INIT_ERROR,
+    STACK_CREATION_ERROR = 2,
+    NULL_PTR_ERROR,
+    INTERRUPTION_INIT_ERROR,
 };
 
 // Estrutura que define um Task Control Block (TCB)
 typedef struct task_t
 {
-  struct task_t *prev, *next; // ponteiros para usar em filas
+    struct task_t *prev, *next; // ponteiros para usar em filas
 
-  int id;             // identificador da tarefa
-  ucontext_t context; // contexto armazenado da tarefa
-  short status;       // pronta, rodando, suspensa, ...
+    int id;             // identificador da tarefa
+    ucontext_t context; // contexto armazenado da tarefa
+    short status;       // pronta, rodando, suspensa, ...
 
-  int exit_code; // codigo de saida da tarefa
+    int exit_code; // codigo de saida da tarefa
 
-  short dynamic_priority; // prioridade dinâmica da tarefa
-  short static_priority;  // prioridade estática da tarefa
+    short dynamic_priority; // prioridade dinâmica da tarefa
+    short static_priority;  // prioridade estática da tarefa
 
-  unsigned int execution_time; // tempo desde a criacao da tarefa
-  unsigned int processor_time; // tempo passado executando
-  unsigned int activations;    // numero de vezes em que foi feito task_switch para ela
+    unsigned int execution_time; // tempo desde a criacao da tarefa
+    unsigned int processor_time; // tempo passado executando
+    unsigned int activations;    // numero de vezes em que foi feito task_switch para ela
 
-  int waiting_task; // id da tarefa que a tarefa atual está esperando
+    int waiting_task; // id da tarefa que a tarefa atual está esperando
 
-  unsigned int wake_up_time; // tempo em que a tarefa deve acordar
+    unsigned int wake_up_time; // tempo em que a tarefa deve acordar
 
-  // ... (outros campos serão adicionados mais tarde)
+    // ... (outros campos serão adicionados mais tarde)
 } task_t;
 
 // estrutura que define um semáforo
 typedef struct
 {
-  int value;      // capacidade do semáforo
-  task_t *queue;  // fila de tarefas bloqueadas no semáforo
-  int exit_code;  // código de saida
+    int value;     // capacidade do semáforo
+    task_t *queue; // fila de tarefas bloqueadas no semáforo
+    int exit_code; // código de saida
+    int mutex;     // para evitar raceconditions
 
 } semaphore_t;
 
 // estrutura que define um mutex
 typedef struct
 {
-  // preencher quando necessário
+    // preencher quando necessário
 } mutex_t;
 
 // estrutura que define uma barreira
 typedef struct
 {
-  // preencher quando necessário
+    // preencher quando necessário
 } barrier_t;
 
 // estrutura que define uma fila de mensagens
 typedef struct
 {
-  // preencher quando necessário
+    // preencher quando necessário
 } mqueue_t;
 
 #endif

@@ -56,6 +56,8 @@ int clock_ticks = 0;     // numero atual de ticks do relogio
 
 unsigned int sysclock = 0; // relogio do sistema (em ms)
 
+int kernel_lock = 0; // flag que indica se a task atual pode ser preemptada
+
 // declaracoes de prototipos de funcoes privadas
 void dispatcher_init(void);
 void main_init(void);
@@ -90,9 +92,9 @@ void interruption_handler(int signum)
     {
         DEBUG_MSG("interruption_handler: fim de quantum, fazendo preempcao por tempo\n")
         clock_ticks = 0;
-        if (curr->id == DISPATCHER_PID)
+        if (kernel_lock || curr->id == DISPATCHER_PID)
         {
-            DEBUG_MSG("interruption_handler: dispatcher nao pode ser preemptado\n")
+            DEBUG_MSG("interruption_handler: dentro de espaco de nucleo, nao foi possivel fazer preempcao\n")
             return;
         }
         task_yield();
@@ -295,6 +297,7 @@ void wake_tasks(void)
 
 void dispatcher(void)
 {
+    kernel_lock = 1;
     while (user_tasks_num > 0)
     {
         DEBUG_MSG("dispatcher: recebendo o controle\n");
@@ -313,7 +316,10 @@ void dispatcher(void)
 
             // trocando o contexto para proxima task
             unsigned int task_start = systime();
+            clock_ticks = 0;
+            kernel_lock = 0;
             task_switch(next);
+            kernel_lock = 1;
             next->processor_time += systime() - task_start;
 
             dispatcher_start = systime();
@@ -351,7 +357,7 @@ void dispatcher(void)
 
 int task_init(task_t *task, void (*start_routine)(void *), void *arg)
 {
-
+    kernel_lock = 1;
     DEBUG_MSG("task_init: iniciando nova task...\n");
 
     getcontext(&(task->context));
@@ -392,6 +398,7 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
 
     DEBUG_MSG("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
 
+    kernel_lock = 0;
     return task->id;
 }
 
@@ -410,6 +417,7 @@ int task_id(void)
 
 int task_switch(task_t *task)
 {
+    kernel_lock = 1;
     if (!task)
     {
         perror("Ponteiro inválido");
@@ -423,11 +431,14 @@ int task_switch(task_t *task)
 
     task_t *prev = curr;
     curr = task;
+    DEBUG_MSG("task_switch: trocando de contexto\n");
+    kernel_lock = 0;
     return swapcontext(&(prev->context), &(task->context));
 }
 
 void task_exit(int exit_code)
 {
+    kernel_lock = 1;
     curr->status = TERMINATED;
     task_t *prev = curr;
     curr->execution_time = systime() - curr->execution_time;
@@ -472,6 +483,7 @@ void task_exit(int exit_code)
         curr = &dispatcher_task;
     }
 
+    kernel_lock = 0;
     swapcontext(&(prev->context), &(curr->context));
 }
 
@@ -515,6 +527,7 @@ unsigned int systime()
 
 void task_suspend(task_t **queue)
 {
+    kernel_lock = 1;
     if (!queue)
     {
         perror("Ponteiro inválido");
@@ -540,6 +553,7 @@ void task_suspend(task_t **queue)
 
 void task_resume(task_t *task, task_t **queue)
 {
+    kernel_lock = 1;
     if (!task || !queue)
     {
         printf("tas: %p, que: %p\n", task, queue);
@@ -552,10 +566,12 @@ void task_resume(task_t *task, task_t **queue)
     queue_remove((queue_t **)queue, (queue_t *)task);
     task->status = READY;
     queue_append((queue_t **)&ready_tasks, (queue_t *)task);
+    kernel_lock = 0;
 }
 
 int task_wait(task_t *task)
 {
+    kernel_lock = 1;
     if (!task || task->status == TERMINATED)
     {
         return -1;
@@ -568,11 +584,13 @@ int task_wait(task_t *task)
 
     DEBUG_MSG("task_wait: task id = %d retornou da task id = %d com exit_code = %d\n", curr->id, task->id, task->exit_code);
 
+    kernel_lock = 0;
     return task->exit_code;
 }
 
 void task_sleep(int t)
 {
+    kernel_lock = 1;
     curr->wake_up_time = systime() + t;
     DEBUG_MSG("task_sleep: task id = %d ira dormir por %d millisegundos ate %d\n", curr->id, t, curr->wake_up_time);
     task_suspend(&sleeping_tasks);
@@ -600,15 +618,25 @@ int sem_down(semaphore_t *s)
     {
         return -1;
     }
+    kernel_lock = 1;
     DEBUG_MSG("sem_down: task id %d decrementando semafaro\n", curr->id);
 
+    // critical section
+    while (__sync_fetch_and_or(&(s->mutex), 1))
+        ;
     s->value--;
+
     if (s->value < 0)
     {
+        s->mutex = 0;
         task_suspend(&(s->queue));
+        DEBUG_MSG("sem_down: task id %d retornando do semafaro com exit code %d\n", curr->id, s->exit_code);
+        return s->exit_code;
     }
 
-    return 0;
+    s->mutex = 0;
+    kernel_lock = 0;
+    return s->exit_code;
 }
 
 int sem_up(semaphore_t *s)
@@ -617,15 +645,22 @@ int sem_up(semaphore_t *s)
     {
         return -1;
     }
+    kernel_lock = 1;
     DEBUG_MSG("sem_up: task id %d incrementando semafaro\n", curr->id);
 
+    // critical section
+    while (__sync_fetch_and_or(&(s->mutex), 1))
+        ;
     s->value++;
+
     if ((s->value <= 0) && s->queue)
     {
         task_resume(s->queue, &(s->queue));
     }
 
-    return s->exit_code;
+    s->mutex = 0;
+    kernel_lock = 0;
+    return 0;
 }
 
 int sem_destroy(semaphore_t *s)
@@ -634,6 +669,7 @@ int sem_destroy(semaphore_t *s)
     {
         return -1;
     }
+    kernel_lock = 1;
 
     DEBUG_MSG("sem_destroy: destruindo semaforo\n");
     s->exit_code = -1;
@@ -643,5 +679,6 @@ int sem_destroy(semaphore_t *s)
         task_resume(s->queue, &(s->queue));
     }
 
+    kernel_lock = 0;
     return 0;
 }
