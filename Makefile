@@ -1,29 +1,32 @@
-CC = gcc
-CFLAGS = -Wall -Wextra
-DEBUG_FLAGS = -DDEBUG -g
+# Makefile
+CC = cc
+TARGET = ppos
 
-LIB_DIR = lib
-TEST_DIR = tests
+# flags
+CPPFLAGS = -Wall --std=c99
 
-# Get all source files in the lib folder
-LIB_SRCS = $(wildcard $(LIB_DIR)/*.c)
-# Generate object file names for the lib sources
-LIB_OBJS = $(patsubst %.c, %.o, $(LIB_SRCS))
+# diretorios fonte
+VPATH = lib:tests
 
-# Get all source files in the tests folder
-TEST_SRCS = $(wildcard $(TEST_DIR)/*.c)
-# Generate executable names for each test file
-TEST_TARGETS = $(patsubst %.c, %, $(TEST_SRCS))
+objs = ppos_core.o queue.o $(TEST).o
 
-# Target for building all tests
-all: $(TEST_TARGETS)
+.PHONY: all clean purge
 
-# Rule for building each test file
-$(TEST_TARGETS): %: $(LIB_OBJS) $(TEST_DIR)/%.c
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -o $@ $(LIB_OBJS) $(filter-out $(LIB_DIR)/ppos_core.c, $(LIB_SRCS)) $(filter-out $(LIB_DIR)/ppos_data.h, $(wildcard $(LIB_DIR)/*.h)) $^
+all: $(TARGET)
+debug: CPPFLAGS += -g -DDEBUG 
+debug: $(TARGET)
 
-%.o: %.c
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -c $< -o $@
+# ligacao
+$(TARGET): $(objs)
+	$(CC) $(objs) $(CPPFLAGS) -o $(TARGET)
 
+# compilacao
+ppos.o: ppos.h ppos_data.h
+queue.o: queue.h
+$(TEST).o: ppos.h 
+
+# limpeza
 clean:
-	rm -f $(TEST_TARGETS) $(LIB_OBJS)
+	-rm -f $(objs) *~ *.o
+purge: clean
+	-rm -f $(TARGET)
