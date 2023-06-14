@@ -23,7 +23,7 @@
 #define ALPHA -1
 
 #define TIMER_TICKS 1000 // em microssegundos (1 milissegundo)
-#define QUANTUM 10
+#define QUANTUM_LIMIT 10
 
 // status das tasks atuais
 enum task_state
@@ -50,6 +50,8 @@ typedef struct task_t
     int id;             // identificador da tarefa
     ucontext_t context; // contexto armazenado da tarefa
     short status;       // pronta, rodando, suspensa, ...
+
+    int quantum; // tempo de execucao da tarefa
 
     int exit_code; // codigo de saida da tarefa
 
