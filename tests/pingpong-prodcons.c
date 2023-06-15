@@ -14,7 +14,7 @@ typedef struct item_t
 #define CONS 2
 #define BUFSIZE 5
 
-task_t prod, cons;
+task_t prod[PRODS], cons[CONS];
 semaphore_t s_vaga, s_item, s_buffer;
 item_t *buffer;
 
@@ -58,7 +58,7 @@ void *consumer(void *arg)
         sem_up(&s_vaga);
 
         printf("    c%ld consumiu %d\n", id, item_elem->item);
-        free(item_elem);
+
         task_sleep(1000);
     }
 
@@ -76,12 +76,12 @@ int main(int argc, char *argv[])
 
     for (long int i = 0; i < PRODS; i++)
     {
-        task_init(&prod, (void *)productor, (void *)i);
+        task_init(&(prod[i]), (void *)productor, (void *)i);
     }
 
     for (long int i = 0; i < CONS; i++)
     {
-        task_init(&cons, (void *)consumer, (void *)i);
+        task_init(&(cons[i]), (void *)consumer, (void *)i);
     }
 
     printf("main: fim\n");
