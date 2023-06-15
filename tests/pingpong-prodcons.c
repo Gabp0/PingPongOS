@@ -4,11 +4,11 @@
 #include "../lib/ppos.h"
 #include "../lib/queue.h"
 
-typedef struct item_t
+typedef struct msg_t
 {
-    struct item_t *prev, *next;
+    struct msg_t *prev, *next;
     int item;
-} item_t;
+} msg_t;
 
 #define PRODS 3
 #define CONS 2
@@ -16,7 +16,7 @@ typedef struct item_t
 
 task_t prod[PRODS], cons[CONS];
 semaphore_t s_vaga, s_item, s_buffer;
-item_t *buffer;
+msg_t *buffer;
 
 void *productor(void *arg)
 {
@@ -31,7 +31,7 @@ void *productor(void *arg)
 
         sem_down(&s_buffer);
         printf("p%ld produziu %d\n", id, item);
-        item_t *item_elem = malloc(sizeof(item_t));
+        msg_t *item_elem = malloc(sizeof(msg_t));
         item_elem->item = item;
         queue_append((queue_t **)&buffer, (queue_t *)item_elem);
         sem_up(&s_buffer);
@@ -51,7 +51,7 @@ void *consumer(void *arg)
         sem_down(&s_item);
 
         sem_down(&s_buffer);
-        item_t *item_elem = buffer;
+        msg_t *item_elem = buffer;
         queue_remove((queue_t **)&buffer, (queue_t *)buffer);
         sem_up(&s_buffer);
 

@@ -8,6 +8,7 @@
 #include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ucontext.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -64,6 +65,23 @@ task_t *scheduler(void);
 void task_print(void *elem);
 void timer_init();
 void interruption_handler(int signum);
+void msg_print(void *msg);
+void enter_cs(int *lock);
+void leave_cs(int *lock);
+
+// enter critical section
+void enter_cs(int *lock)
+{
+    // atomic OR (Intel macro for GCC)
+    while (__sync_fetch_and_or(lock, 1))
+        ; // busy waiting
+}
+
+// leave critical section
+void leave_cs(int *lock)
+{
+    (*lock) = 0;
+}
 
 void ppos_init()
 {
@@ -269,7 +287,6 @@ void wake_tasks(void)
     while (aux && (aux != sleeping_tasks->prev))
     {
         aux_next = aux->next;
-        DEBUG_MSG("wake_tasks: checando task id = %d com wt = %d e now = %d\n", aux->id, aux->wake_up_time, now)
         if (aux->wake_up_time <= now)
         {
             DEBUG_MSG("wake_tasks: acordando task id = %d\n", aux->id)
@@ -292,7 +309,6 @@ void wake_tasks(void)
 
 void dispatcher(void)
 {
-    ;
     while (user_tasks_num > 0)
     {
         DEBUG_MSG("dispatcher: recebendo o controle\n");
@@ -311,37 +327,16 @@ void dispatcher(void)
 
             // trocando o contexto para proxima task
             unsigned int task_start = systime();
-            ;
             next->quantum = 0;
             task_switch(next);
-            ;
             next->processor_time += systime() - task_start;
 
             dispatcher_start = systime();
-
-            switch (next->status)
-            {
-            case READY:
-                /* code */
-                break;
-            case TERMINATED:
-                /* code */
-                break;
-            case SUSPENDED:
-                /* code */
-                break;
-            case RUNNING:
-                /* code */
-                break;
-
-            default:
-                break;
-            }
         }
         else
         {
             DEBUG_MSG("dispatcher: sem proxima task\n");
-            sleep(1); // evita busy waiting
+            // sleep(1); // evita busy waiting
         }
 
         dispatcher_task.processor_time += systime() - dispatcher_start;
@@ -352,7 +347,6 @@ void dispatcher(void)
 
 int task_init(task_t *task, void (*start_routine)(void *), void *arg)
 {
-    ;
     DEBUG_MSG("task_init: iniciando nova task...\n");
 
     getcontext(&(task->context));
@@ -395,7 +389,6 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
 
     DEBUG_MSG("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
 
-    ;
     return task->id;
 }
 
@@ -414,7 +407,6 @@ int task_id(void)
 
 int task_switch(task_t *task)
 {
-    ;
     if (!task)
     {
         perror("Ponteiro inválido");
@@ -428,14 +420,12 @@ int task_switch(task_t *task)
 
     task_t *prev = curr;
     curr = task;
-    DEBUG_MSG("task_switch: trocando de contexto\n");
-    ;
+
     return swapcontext(&(prev->context), &(task->context));
 }
 
 void task_exit(int exit_code)
 {
-    ;
     curr->status = TERMINATED;
     task_t *prev = curr;
     curr->execution_time = systime() - curr->execution_time;
@@ -486,9 +476,6 @@ void task_exit(int exit_code)
 
 void task_setprio(task_t *task, int prio)
 {
-
-    DEBUG_MSG("task_setprio: definindo prioridade\n");
-
     if (!task)
     {
         task = curr;
@@ -503,9 +490,6 @@ void task_setprio(task_t *task, int prio)
 
 int task_getprio(task_t *task)
 {
-
-    DEBUG_MSG("task_getprio: obtendo prioridade\n");
-
     if (!task)
     {
         task = curr;
@@ -550,10 +534,8 @@ void task_suspend(task_t **queue)
 
 void task_resume(task_t *task, task_t **queue)
 {
-    ;
     if (!task || !queue)
     {
-        printf("tas: %p, que: %p\n", task, queue);
         perror("Ponteiro inválido");
         exit(NULL_PTR_ERROR);
     }
@@ -563,12 +545,10 @@ void task_resume(task_t *task, task_t **queue)
     queue_remove((queue_t **)queue, (queue_t *)task);
     task->status = READY;
     queue_append((queue_t **)&ready_tasks, (queue_t *)task);
-    ;
 }
 
 int task_wait(task_t *task)
 {
-    ;
     if (!task || task->status == TERMINATED)
     {
         return -1;
@@ -581,13 +561,11 @@ int task_wait(task_t *task)
 
     DEBUG_MSG("task_wait: task id = %d retornou da task id = %d com exit_code = %d\n", curr->id, task->id, task->exit_code);
 
-    ;
     return task->exit_code;
 }
 
 void task_sleep(int t)
 {
-    ;
     curr->wake_up_time = systime() + t;
     DEBUG_MSG("task_sleep: task id = %d ira dormir por %d millisegundos ate %d\n", curr->id, t, curr->wake_up_time);
     task_suspend(&sleeping_tasks);
@@ -602,77 +580,220 @@ int sem_init(semaphore_t *s, int value)
 
     s->value = value;
     s->queue = NULL;
-    s->exit_code = 0;
 
     DEBUG_MSG("sem_init: inicializando semaforo de tamanho %d\n", value)
+
+    s->active = 1;
 
     return 0;
 }
 
 int sem_down(semaphore_t *s)
 {
-    if (!s)
+    if (!s || !s->active)
     {
         return -1;
     };
     DEBUG_MSG("sem_down: task id %d decrementando semafaro\n", curr->id);
 
     // critical section
-    while (__sync_fetch_and_or(&(s->mutex), 1))
-        ;
-    s->value--;
+    enter_cs(&(s->lock));
+    int v = --(s->value);
+    leave_cs(&(s->lock));
 
-    if (s->value < 0)
+    if (v < 0)
     {
-        s->mutex = 0;
         task_suspend(&(s->queue));
-        DEBUG_MSG("sem_down: task id %d retornando do semafaro com exit code %d\n", curr->id, s->exit_code);
-        return s->exit_code;
+        DEBUG_MSG("sem_down: task id %d retornando do semafaro\n", curr->id);
+        return 0;
     }
 
-    s->mutex = 0;
-    ;
-    return s->exit_code;
+    return 0;
 }
 
 int sem_up(semaphore_t *s)
 {
-    if (!s)
+    if (!s || !s->active)
     {
         return -1;
-    };
+    }
     DEBUG_MSG("sem_up: task id %d incrementando semafaro\n", curr->id);
 
     // critical section
-    while (__sync_fetch_and_or(&(s->mutex), 1))
-        ;
-    s->value++;
+    enter_cs(&(s->lock));
+    int v = ++(s->value);
+    leave_cs(&(s->lock));
 
-    if ((s->value <= 0) && s->queue)
+    if ((v <= 0) && s->queue)
     {
         task_resume(s->queue, &(s->queue));
     }
 
-    s->mutex = 0;
-    ;
     return 0;
 }
 
 int sem_destroy(semaphore_t *s)
 {
-    if (!s)
+    if (!s || !s->active)
     {
         return -1;
-    };
+    }
 
     DEBUG_MSG("sem_destroy: destruindo semaforo\n");
-    s->exit_code = -1;
+    s->active = 0;
 
     while (s->queue)
     {
         task_resume(s->queue, &(s->queue));
     }
 
-    ;
     return 0;
+}
+
+int mqueue_init(mqueue_t *queue, int max, int size)
+{
+    if (!queue)
+    {
+        return -1;
+    }
+    DEBUG_MSG("mqueue_init: inicializando fila de tamanho %d\n", max)
+
+    queue->max_msgs = max;
+    queue->msg_size = size;
+    queue->buffer = NULL;
+
+    sem_init(&(queue->s_buffer), 1);
+    sem_init(&(queue->s_item), 0);
+    sem_init(&(queue->s_vaga), max);
+
+    queue->active = 1;
+
+    return 0;
+}
+
+int mqueue_send(mqueue_t *queue, void *msg)
+{
+    if (!queue || !msg || !queue->active)
+    {
+        return -1;
+    }
+    DEBUG_MSG("mqueue_send: task id %d enviando mensagem\n", curr->id);
+
+    sem_down(&(queue->s_vaga));
+    sem_down(&(queue->s_buffer));
+    if (!queue->active) // fila pode ter sido destruida enquanto task dormia
+    {
+        return -1;
+    }
+
+    DEBUG_MSG("mqueue_send: copindo mensagem %p de tamanho %d para dentro da fila\n", msg, queue->msg_size);
+
+    msg_t *msg_elem = (msg_t *)malloc(sizeof(msg_t));
+    if (!msg_elem)
+    {
+        return -1;
+    }
+
+    msg_elem->msg = malloc(queue->msg_size);
+    if (!msg_elem->msg)
+    {
+        return -1;
+    }
+
+    memcpy(msg_elem->msg, msg, queue->msg_size);
+    msg_elem->next = msg_elem->prev = NULL;
+    if (queue_append((queue_t **)&(queue->buffer), (queue_t *)msg_elem) < 0)
+    {
+        return -1;
+    }
+
+#ifdef DEBUG
+    fprintf(stderr, ANSI_RED);
+    queue_print("mqueue_send: buffer", (queue_t *)queue->buffer, (void *)msg_print);
+    fprintf(stderr, ANSI_RESET);
+#endif
+
+    DEBUG_MSG("mqueue_send: mensagem copiada, liberando semafaros\n");
+
+    sem_up(&(queue->s_buffer));
+    sem_up(&(queue->s_item));
+
+    return 0;
+}
+
+int mqueue_recv(mqueue_t *queue, void *msg)
+{
+    if (!queue || !msg || !queue->active)
+    {
+        return -1;
+    }
+    DEBUG_MSG("mqueue_recv: task id %d recebendo mensagem\n", curr->id);
+
+    sem_down(&(queue->s_item));
+    sem_down(&(queue->s_buffer));
+    if (!queue->active) // fila pode ter sido destruida enquanto task dormia
+    {
+        return -1;
+    }
+
+    DEBUG_MSG("mqueue_recv: copindo mensagem de tamanho %d de dentro da fila\n", queue->msg_size);
+
+#ifdef DEBUG
+    fprintf(stderr, ANSI_RED);
+    queue_print("mqueue_recv: buffer", (queue_t *)queue->buffer, (void *)msg_print);
+    fprintf(stderr, ANSI_RESET);
+#endif
+
+    memcpy(msg, queue->buffer->msg, queue->msg_size);
+    msg_t *aux = queue->buffer;
+    if (queue_remove((queue_t **)&(queue->buffer), (queue_t *)queue->buffer) < 0)
+    {
+        return -1;
+    }
+
+    DEBUG_MSG("mqueue_recv: mensagem %p copiada, liberando semafaros\n", aux);
+    free(aux);
+
+    sem_up(&(queue->s_buffer));
+    sem_up(&(queue->s_vaga));
+
+    return 0;
+}
+
+int mqueue_destroy(mqueue_t *queue)
+{
+    if (!queue)
+    {
+        return -1;
+    }
+    DEBUG_MSG("mqueue_destroy: destruindo fila\n");
+
+    sem_destroy(&(queue->s_buffer));
+    sem_destroy(&(queue->s_item));
+    sem_destroy(&(queue->s_vaga));
+
+    while (queue->buffer)
+    {
+        msg_t *aux = queue->buffer;
+        if (queue_remove((queue_t **)&(queue->buffer), (queue_t *)queue->buffer) < 0)
+        {
+            return -1;
+        }
+        free(aux);
+    }
+
+    queue->active = 0;
+
+    return 0;
+}
+
+int mqueue_msgs(mqueue_t *queue)
+{
+    return queue_size((queue_t *)queue->buffer);
+}
+
+void msg_print(void *msg)
+{
+    msg_t *msg_elem = (msg_t *)msg;
+    printf("%p", msg_elem->msg);
 }

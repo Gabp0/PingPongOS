@@ -74,9 +74,10 @@ typedef struct
 {
     int value;     // capacidade do semáforo
     task_t *queue; // fila de tarefas bloqueadas no semáforo
-    int exit_code; // código de saida
-    int mutex;     // para evitar raceconditions
 
+    int lock; // para evitar raceconditions
+
+    int active; // indica se o semaforo nao foi destruido
 } semaphore_t;
 
 // estrutura que define um mutex
@@ -92,9 +93,24 @@ typedef struct
 } barrier_t;
 
 // estrutura que define uma fila de mensagens
+typedef struct msg_t
+{
+    struct msg_t *prev, *next; // ponteiros para usar em filas
+    void *msg;                 // conteúdo da mensagem
+} msg_t;
+
 typedef struct
 {
-    // preencher quando necessário
+    msg_t *buffer; // buffer da fila
+
+    int max_msgs; // capacidade da fila
+    int msg_size; // tamanho da mensagem em bytes
+
+    semaphore_t s_buffer; // controle do buffer
+    semaphore_t s_item;   // controle de consumo dos itens
+    semaphore_t s_vaga;   // controle de vaga no buffer
+
+    int active; // indica se a fila nao foi destruida
 } mqueue_t;
 
 #endif

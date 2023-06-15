@@ -3,22 +3,23 @@ CC = cc
 TARGET = ppos
 
 # flags
-CPPFLAGS = -Wall --std=c99
+CPPFLAGS = -Wall -g --std=c99
+LDLIBS = -lm
 
 # diretorios fonte
 VPATH = lib:tests
 
 objs = ppos_core.o queue.o $(TEST).o
 
-.PHONY: all clean purge
+.PHONY: all clean purge debug
 
 all: $(TARGET)
-debug: CPPFLAGS += -g -DDEBUG 
+debug: CPPFLAGS += -DDEBUG 
 debug: $(TARGET)
 
 # ligacao
 $(TARGET): $(objs)
-	$(CC) $(objs) $(CPPFLAGS) -o $(TARGET)
+	$(CC) -o $(TARGET) $(objs) $(CPPFLAGS) $(LDLIBS) 
 
 # compilacao
 ppos.o: ppos.h ppos_data.h
