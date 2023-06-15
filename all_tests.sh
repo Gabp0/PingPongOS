@@ -6,7 +6,7 @@ do
     echo " "
     echo "---------------------------------------------------"
     echo "Compiling $file"
-    cc -Wall -g -o teste lib/ppos_core.c lib/queue.c $file
+    cc --std=c99 -Wall -g -o teste lib/ppos_core.c lib/queue.c $file -lm
     echo "Running $file"
     ./teste
 done

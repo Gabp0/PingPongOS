@@ -12,7 +12,6 @@
 #include <ucontext.h>
 #include <signal.h>
 #include <sys/time.h>
-#include <unistd.h>
 
 #define ANSI_RED "\x1b[31m"
 #define ANSI_GREEN "\x1b[32m"
