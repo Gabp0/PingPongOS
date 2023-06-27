@@ -15,7 +15,7 @@
 #endif
 
 // estrutura que define um tratador de sinal (deve ser global ou static)
-struct sigaction action;
+struct sigaction interruption_action;
 
 /* função que tratará os sinais recebidos */
 void tratador(int signum)
@@ -26,11 +26,11 @@ void tratador(int signum)
 int main(void)
 {
    // registra a ação para o sinal SIGINT (Ctrl-C no teclado)
-   action.sa_handler = tratador;
-   sigemptyset(&action.sa_mask);
-   action.sa_flags = 0;
+   interruption_action.sa_handler = tratador;
+   sigemptyset(&interruption_action.sa_mask);
+   interruption_action.sa_flags = 0;
 
-   if (sigaction(SIGINT, &action, 0) < 0)
+   if (sigaction(SIGINT, &interruption_action, 0) < 0)
    {
       perror("Erro em sigaction: ");
       exit(1);

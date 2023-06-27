@@ -38,21 +38,22 @@
         ;
 #endif
 
-task_t main_task;       // tarefa main
-task_t dispatcher_task; // tarefa do dispatcher
+task_t main_task;        // tarefa main
+task_t dispatcher_task;  // tarefa do dispatcher
+task_t disk_driver_task; // tarefa do driver de disco;
 
 unsigned long long last_task_id = 0; // id da ultima tarefa criada
 
-task_t *curr = NULL;    // task atualmente rodando
+task_t *curr = NULL;
 int user_tasks_num = 0; // numero de tarefas de usuario no sistema
 
 task_t *ready_tasks = NULL;     // fila de tarefas do usuario
 task_t *suspended_tasks = NULL; // fila de tarefas suspensas
 task_t *sleeping_tasks = NULL;  // fila de tarefas dormindo
 
-struct sigaction action; // estrutura que define um tratador de sinal (deve ser global ou static)
-struct itimerval timer;  // estrutura de inicialização do timer
-int clock_ticks = 0;     // numero atual de ticks do relogio
+struct sigaction interruption_action; // estrutura que define um tratador de sinal (deve ser global ou static)
+struct itimerval timer;               // estrutura de inicialização do timer
+int clock_ticks = 0;                  // numero atual de ticks do relogio
 
 unsigned int sysclock = 0; // relogio do sistema (em ms)
 
@@ -97,6 +98,9 @@ void ppos_init()
 
     timer_init();
     DEBUG_MSG("ppos_init: timer e tratador de interrupcoes inicializados\n");
+
+    // disk_mgr_init eh responsavel por inicializar o disco e a fila de tarefas
+    disk_driver_task.id = -2;
 }
 
 void interruption_handler(int signum)
@@ -115,10 +119,10 @@ void timer_init()
 {
     // define o tratador para SIGALRM
     DEBUG_MSG("timer_init: definindo o tratador de interrupcoes\n");
-    action.sa_handler = interruption_handler;
-    sigemptyset(&action.sa_mask);
-    action.sa_flags = 0;
-    if (sigaction(SIGALRM, &action, 0) < 0)
+    interruption_action.sa_handler = interruption_handler;
+    sigemptyset(&interruption_action.sa_mask);
+    interruption_action.sa_flags = 0;
+    if (sigaction(SIGALRM, &interruption_action, 0) < 0)
     {
         perror("Erro em sigaction: ");
         exit(INTERRUPTION_INIT_ERROR);
@@ -387,6 +391,12 @@ int task_init(task_t *task, void (*start_routine)(void *), void *arg)
     user_tasks_num++;
 
     DEBUG_MSG("task_init: task inicializada, id = %d, status = %d\n", task->id, task->status);
+
+    // driver de disco nao eh uma tarefa de usuario
+    if (task->id == disk_driver_task.id)
+    {
+        user_tasks_num--;
+    }
 
     return task->id;
 }

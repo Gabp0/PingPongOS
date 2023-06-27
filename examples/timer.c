@@ -16,7 +16,7 @@
 #endif
 
 // estrutura que define um tratador de sinal (deve ser global ou static)
-struct sigaction action;
+struct sigaction interruption_action;
 
 // estrutura de inicialização do timer
 struct itimerval timer;
@@ -30,10 +30,10 @@ void tratador(int signum)
 int main()
 {
   // registra a ação para o sinal de timer SIGALRM (sinal do timer)
-  action.sa_handler = tratador;
-  sigemptyset(&action.sa_mask);
-  action.sa_flags = 0;
-  if (sigaction(SIGALRM, &action, 0) < 0)
+  interruption_action.sa_handler = tratador;
+  sigemptyset(&interruption_action.sa_mask);
+  interruption_action.sa_flags = 0;
+  if (sigaction(SIGALRM, &interruption_action, 0) < 0)
   {
     perror("Erro em sigaction: ");
     exit(1);

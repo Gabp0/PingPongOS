@@ -31,7 +31,7 @@ enum task_state
     READY,
     RUNNING,
     SUSPENDED,
-    TERMINATED
+    TERMINATED,
 };
 
 // error exit codes
@@ -112,5 +112,7 @@ typedef struct
 
     int active; // indica se a fila nao foi destruida
 } mqueue_t;
+
+extern task_t disk_driver_task;
 
 #endif

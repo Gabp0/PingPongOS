@@ -1,0 +1,1309 @@
+main: inicio
+Disco contem 256 blocos de 64 bytes cada
+    0 ms: T03 movendo 16 blocos entre bloco   0 e bloco 255
+    0 ms: T03 lendo bloco   0
+    0 ms: T04 movendo 16 blocos entre bloco  16 e bloco 239
+    0 ms: T04 lendo bloco  16
+    0 ms: T05 movendo 16 blocos entre bloco  32 e bloco 223
+    0 ms: T05 lendo bloco  32
+    0 ms: T06 movendo 16 blocos entre bloco  48 e bloco 207
+    0 ms: T06 lendo bloco  48
+    0 ms: T07 movendo 16 blocos entre bloco  64 e bloco 191
+    0 ms: T07 lendo bloco  64
+    0 ms: T08 movendo 16 blocos entre bloco  80 e bloco 175
+    0 ms: T08 lendo bloco  80
+    0 ms: T09 movendo 16 blocos entre bloco  96 e bloco 159
+    0 ms: T09 lendo bloco  96
+    0 ms: T10 movendo 16 blocos entre bloco 112 e bloco 143
+    0 ms: T10 lendo bloco 112
+   38 ms: T03 leu   bloco   0
+   38 ms: T03 lendo bloco 255
+   85 ms: T04 leu   bloco  16
+   85 ms: T04 lendo bloco 239
+  151 ms: T05 leu   bloco  32
+  151 ms: T05 lendo bloco 223
+  199 ms: T06 leu   bloco  48
+  199 ms: T06 lendo bloco 207
+  265 ms: T07 leu   bloco  64
+  265 ms: T07 lendo bloco 191
+  313 ms: T08 leu   bloco  80
+  313 ms: T08 lendo bloco 175
+  363 ms: T09 leu   bloco  96
+  363 ms: T09 lendo bloco 159
+  410 ms: T10 leu   bloco 112
+  410 ms: T10 lendo bloco 143
+  614 ms: T03 leu   bloco 255
+  614 ms: T03 bloco   0 tem: [<--bloco 0000-------------------------------------------------->]
+  614 ms: T03 bloco 255 tem: [<--bloco 0255-------------------------------------------------->]
+  614 ms: T03 escrevendo bloco 255
+  669 ms: T04 leu   bloco 239
+  669 ms: T04 bloco  16 tem: [<--bloco 0016-------------------------------------------------->]
+  669 ms: T04 bloco 239 tem: [<--bloco 0239-------------------------------------------------->]
+  669 ms: T04 escrevendo bloco 239
+  736 ms: T05 leu   bloco 223
+  736 ms: T05 bloco  32 tem: [<--bloco 0032-------------------------------------------------->]
+  736 ms: T05 bloco 223 tem: [<--bloco 0223-------------------------------------------------->]
+  736 ms: T05 escrevendo bloco 223
+  806 ms: T06 leu   bloco 207
+  806 ms: T06 bloco  48 tem: [<--bloco 0048-------------------------------------------------->]
+  806 ms: T06 bloco 207 tem: [<--bloco 0207-------------------------------------------------->]
+  806 ms: T06 escrevendo bloco 207
+  866 ms: T07 leu   bloco 191
+  866 ms: T07 bloco  64 tem: [<--bloco 0064-------------------------------------------------->]
+  866 ms: T07 bloco 191 tem: [<--bloco 0191-------------------------------------------------->]
+  866 ms: T07 escrevendo bloco 191
+  929 ms: T08 leu   bloco 175
+  929 ms: T08 bloco  80 tem: [<--bloco 0080-------------------------------------------------->]
+  929 ms: T08 bloco 175 tem: [<--bloco 0175-------------------------------------------------->]
+  929 ms: T08 escrevendo bloco 175
+  986 ms: T09 leu   bloco 159
+  986 ms: T09 bloco  96 tem: [<--bloco 0096-------------------------------------------------->]
+  986 ms: T09 bloco 159 tem: [<--bloco 0159-------------------------------------------------->]
+  986 ms: T09 escrevendo bloco 159
+ 1048 ms: T10 leu   bloco 143
+ 1048 ms: T10 bloco 112 tem: [<--bloco 0112-------------------------------------------------->]
+ 1048 ms: T10 bloco 143 tem: [<--bloco 0143-------------------------------------------------->]
+ 1048 ms: T10 escrevendo bloco 143
+ 1203 ms: T03 escreveu   bloco 255
+ 1203 ms: T03 escrevendo bloco   0
+ 1270 ms: T04 escreveu   bloco 239
+ 1270 ms: T04 escrevendo bloco  16
+ 1322 ms: T05 escreveu   bloco 223
+ 1322 ms: T05 escrevendo bloco  32
+ 1391 ms: T06 escreveu   bloco 207
+ 1391 ms: T06 escrevendo bloco  48
+ 1463 ms: T07 escreveu   bloco 191
+ 1463 ms: T07 escrevendo bloco  64
+ 1527 ms: T08 escreveu   bloco 175
+ 1527 ms: T08 escrevendo bloco  80
+ 1600 ms: T09 escreveu   bloco 159
+ 1600 ms: T09 escrevendo bloco  96
+ 1671 ms: T10 escreveu   bloco 143
+ 1671 ms: T10 escrevendo bloco 112
+ 1867 ms: T03 escreveu   bloco   0
+ 1867 ms: T03 lendo bloco   1
+ 1931 ms: T04 escreveu   bloco  16
+ 1931 ms: T04 lendo bloco  17
+ 2001 ms: T05 escreveu   bloco  32
+ 2001 ms: T05 lendo bloco  33
+ 2058 ms: T06 escreveu   bloco  48
+ 2058 ms: T06 lendo bloco  49
+ 2107 ms: T07 escreveu   bloco  64
+ 2107 ms: T07 lendo bloco  65
+ 2168 ms: T08 escreveu   bloco  80
+ 2168 ms: T08 lendo bloco  81
+ 2219 ms: T09 escreveu   bloco  96
+ 2219 ms: T09 lendo bloco  97
+ 2273 ms: T10 escreveu   bloco 112
+ 2273 ms: T10 lendo bloco 113
+ 2436 ms: T03 leu   bloco   1
+ 2436 ms: T03 lendo bloco 254
+ 2504 ms: T04 leu   bloco  17
+ 2504 ms: T04 lendo bloco 238
+ 2555 ms: T05 leu   bloco  33
+ 2555 ms: T05 lendo bloco 222
+ 2606 ms: T06 leu   bloco  49
+ 2606 ms: T06 lendo bloco 206
+ 2677 ms: T07 leu   bloco  65
+ 2677 ms: T07 lendo bloco 190
+ 2733 ms: T08 leu   bloco  81
+ 2733 ms: T08 lendo bloco 174
+ 2782 ms: T09 leu   bloco  97
+ 2782 ms: T09 lendo bloco 158
+ 2851 ms: T10 leu   bloco 113
+ 2851 ms: T10 lendo bloco 142
+ 3044 ms: T03 leu   bloco 254
+ 3044 ms: T03 bloco   1 tem: [<--bloco 0001-------------------------------------------------->]
+ 3044 ms: T03 bloco 254 tem: [<--bloco 0254-------------------------------------------------->]
+ 3044 ms: T03 escrevendo bloco 254
+ 3114 ms: T04 leu   bloco 238
+ 3114 ms: T04 bloco  17 tem: [<--bloco 0017-------------------------------------------------->]
+ 3114 ms: T04 bloco 238 tem: [<--bloco 0238-------------------------------------------------->]
+ 3114 ms: T04 escrevendo bloco 238
+ 3178 ms: T05 leu   bloco 222
+ 3178 ms: T05 bloco  33 tem: [<--bloco 0033-------------------------------------------------->]
+ 3178 ms: T05 bloco 222 tem: [<--bloco 0222-------------------------------------------------->]
+ 3178 ms: T05 escrevendo bloco 222
+ 3226 ms: T06 leu   bloco 206
+ 3226 ms: T06 bloco  49 tem: [<--bloco 0049-------------------------------------------------->]
+ 3226 ms: T06 bloco 206 tem: [<--bloco 0206-------------------------------------------------->]
+ 3226 ms: T06 escrevendo bloco 206
+ 3282 ms: T07 leu   bloco 190
+ 3282 ms: T07 bloco  65 tem: [<--bloco 0065-------------------------------------------------->]
+ 3282 ms: T07 bloco 190 tem: [<--bloco 0190-------------------------------------------------->]
+ 3282 ms: T07 escrevendo bloco 190
+ 3352 ms: T08 leu   bloco 174
+ 3352 ms: T08 bloco  81 tem: [<--bloco 0081-------------------------------------------------->]
+ 3352 ms: T08 bloco 174 tem: [<--bloco 0174-------------------------------------------------->]
+ 3352 ms: T08 escrevendo bloco 174
+ 3413 ms: T09 leu   bloco 158
+ 3413 ms: T09 bloco  97 tem: [<--bloco 0097-------------------------------------------------->]
+ 3413 ms: T09 bloco 158 tem: [<--bloco 0158-------------------------------------------------->]
+ 3413 ms: T09 escrevendo bloco 158
+ 3475 ms: T10 leu   bloco 142
+ 3475 ms: T10 bloco 113 tem: [<--bloco 0113-------------------------------------------------->]
+ 3475 ms: T10 bloco 142 tem: [<--bloco 0142-------------------------------------------------->]
+ 3475 ms: T10 escrevendo bloco 142
+ 3639 ms: T03 escreveu   bloco 254
+ 3639 ms: T03 escrevendo bloco   1
+ 3706 ms: T04 escreveu   bloco 238
+ 3706 ms: T04 escrevendo bloco  17
+ 3761 ms: T05 escreveu   bloco 222
+ 3761 ms: T05 escrevendo bloco  33
+ 3820 ms: T06 escreveu   bloco 206
+ 3820 ms: T06 escrevendo bloco  49
+ 3876 ms: T07 escreveu   bloco 190
+ 3876 ms: T07 escrevendo bloco  65
+ 3931 ms: T08 escreveu   bloco 174
+ 3931 ms: T08 escrevendo bloco  81
+ 3988 ms: T09 escreveu   bloco 158
+ 3988 ms: T09 escrevendo bloco  97
+ 4059 ms: T10 escreveu   bloco 142
+ 4059 ms: T10 escrevendo bloco 113
+ 4259 ms: T03 escreveu   bloco   1
+ 4259 ms: T03 lendo bloco   2
+ 4311 ms: T04 escreveu   bloco  17
+ 4311 ms: T04 lendo bloco  18
+ 4364 ms: T05 escreveu   bloco  33
+ 4364 ms: T05 lendo bloco  34
+ 4432 ms: T06 escreveu   bloco  49
+ 4432 ms: T06 lendo bloco  50
+ 4497 ms: T07 escreveu   bloco  65
+ 4497 ms: T07 lendo bloco  66
+ 4557 ms: T08 escreveu   bloco  81
+ 4557 ms: T08 lendo bloco  82
+ 4605 ms: T09 escreveu   bloco  97
+ 4605 ms: T09 lendo bloco  98
+ 4659 ms: T10 escreveu   bloco 113
+ 4659 ms: T10 lendo bloco 114
+ 4810 ms: T03 leu   bloco   2
+ 4810 ms: T03 lendo bloco 253
+ 4859 ms: T04 leu   bloco  18
+ 4859 ms: T04 lendo bloco 237
+ 4915 ms: T05 leu   bloco  34
+ 4915 ms: T05 lendo bloco 221
+ 4964 ms: T06 leu   bloco  50
+ 4964 ms: T06 lendo bloco 205
+ 5020 ms: T07 leu   bloco  66
+ 5020 ms: T07 lendo bloco 189
+ 5079 ms: T08 leu   bloco  82
+ 5079 ms: T08 lendo bloco 173
+ 5148 ms: T09 leu   bloco  98
+ 5148 ms: T09 lendo bloco 157
+ 5216 ms: T10 leu   bloco 114
+ 5216 ms: T10 lendo bloco 141
+ 5400 ms: T03 leu   bloco 253
+ 5400 ms: T03 bloco   2 tem: [<--bloco 0002-------------------------------------------------->]
+ 5400 ms: T03 bloco 253 tem: [<--bloco 0253-------------------------------------------------->]
+ 5400 ms: T03 escrevendo bloco 253
+ 5459 ms: T04 leu   bloco 237
+ 5459 ms: T04 bloco  18 tem: [<--bloco 0018-------------------------------------------------->]
+ 5459 ms: T04 bloco 237 tem: [<--bloco 0237-------------------------------------------------->]
+ 5459 ms: T04 escrevendo bloco 237
+ 5530 ms: T05 leu   bloco 221
+ 5530 ms: T05 bloco  34 tem: [<--bloco 0034-------------------------------------------------->]
+ 5530 ms: T05 bloco 221 tem: [<--bloco 0221-------------------------------------------------->]
+ 5530 ms: T05 escrevendo bloco 221
+ 5593 ms: T06 leu   bloco 205
+ 5593 ms: T06 bloco  50 tem: [<--bloco 0050-------------------------------------------------->]
+ 5593 ms: T06 bloco 205 tem: [<--bloco 0205-------------------------------------------------->]
+ 5593 ms: T06 escrevendo bloco 205
+ 5646 ms: T07 leu   bloco 189
+ 5646 ms: T07 bloco  66 tem: [<--bloco 0066-------------------------------------------------->]
+ 5646 ms: T07 bloco 189 tem: [<--bloco 0189-------------------------------------------------->]
+ 5646 ms: T07 escrevendo bloco 189
+ 5702 ms: T08 leu   bloco 173
+ 5702 ms: T08 bloco  82 tem: [<--bloco 0082-------------------------------------------------->]
+ 5702 ms: T08 bloco 173 tem: [<--bloco 0173-------------------------------------------------->]
+ 5702 ms: T08 escrevendo bloco 173
+ 5751 ms: T09 leu   bloco 157
+ 5751 ms: T09 bloco  98 tem: [<--bloco 0098-------------------------------------------------->]
+ 5751 ms: T09 bloco 157 tem: [<--bloco 0157-------------------------------------------------->]
+ 5751 ms: T09 escrevendo bloco 157
+ 5820 ms: T10 leu   bloco 141
+ 5820 ms: T10 bloco 114 tem: [<--bloco 0114-------------------------------------------------->]
+ 5820 ms: T10 bloco 141 tem: [<--bloco 0141-------------------------------------------------->]
+ 5820 ms: T10 escrevendo bloco 141
+ 5969 ms: T03 escreveu   bloco 253
+ 5969 ms: T03 escrevendo bloco   2
+ 6022 ms: T04 escreveu   bloco 237
+ 6022 ms: T04 escrevendo bloco  18
+ 6078 ms: T05 escreveu   bloco 221
+ 6078 ms: T05 escrevendo bloco  34
+ 6134 ms: T06 escreveu   bloco 205
+ 6134 ms: T06 escrevendo bloco  50
+ 6195 ms: T07 escreveu   bloco 189
+ 6195 ms: T07 escrevendo bloco  66
+ 6259 ms: T08 escreveu   bloco 173
+ 6259 ms: T08 escrevendo bloco  82
+ 6309 ms: T09 escreveu   bloco 157
+ 6309 ms: T09 escrevendo bloco  98
+ 6365 ms: T10 escreveu   bloco 141
+ 6365 ms: T10 escrevendo bloco 114
+ 6564 ms: T03 escreveu   bloco   2
+ 6564 ms: T03 lendo bloco   3
+ 6621 ms: T04 escreveu   bloco  18
+ 6621 ms: T04 lendo bloco  19
+ 6671 ms: T05 escreveu   bloco  34
+ 6671 ms: T05 lendo bloco  35
+ 6733 ms: T06 escreveu   bloco  50
+ 6733 ms: T06 lendo bloco  51
+ 6800 ms: T07 escreveu   bloco  66
+ 6800 ms: T07 lendo bloco  67
+ 6847 ms: T08 escreveu   bloco  82
+ 6847 ms: T08 lendo bloco  83
+ 6913 ms: T09 escreveu   bloco  98
+ 6913 ms: T09 lendo bloco  99
+ 6985 ms: T10 escreveu   bloco 114
+ 6985 ms: T10 lendo bloco 115
+ 7131 ms: T03 leu   bloco   3
+ 7131 ms: T03 lendo bloco 252
+ 7180 ms: T04 leu   bloco  19
+ 7180 ms: T04 lendo bloco 236
+ 7252 ms: T05 leu   bloco  35
+ 7252 ms: T05 lendo bloco 220
+ 7309 ms: T06 leu   bloco  51
+ 7309 ms: T06 lendo bloco 204
+ 7368 ms: T07 leu   bloco  67
+ 7368 ms: T07 lendo bloco 188
+ 7433 ms: T08 leu   bloco  83
+ 7433 ms: T08 lendo bloco 172
+ 7486 ms: T09 leu   bloco  99
+ 7486 ms: T09 lendo bloco 156
+ 7552 ms: T10 leu   bloco 115
+ 7552 ms: T10 lendo bloco 140
+ 7727 ms: T03 leu   bloco 252
+ 7727 ms: T03 bloco   3 tem: [<--bloco 0003-------------------------------------------------->]
+ 7727 ms: T03 bloco 252 tem: [<--bloco 0252-------------------------------------------------->]
+ 7727 ms: T03 escrevendo bloco 252
+ 7775 ms: T04 leu   bloco 236
+ 7775 ms: T04 bloco  19 tem: [<--bloco 0019-------------------------------------------------->]
+ 7775 ms: T04 bloco 236 tem: [<--bloco 0236-------------------------------------------------->]
+ 7775 ms: T04 escrevendo bloco 236
+ 7828 ms: T05 leu   bloco 220
+ 7828 ms: T05 bloco  35 tem: [<--bloco 0035-------------------------------------------------->]
+ 7828 ms: T05 bloco 220 tem: [<--bloco 0220-------------------------------------------------->]
+ 7828 ms: T05 escrevendo bloco 220
+ 7883 ms: T06 leu   bloco 204
+ 7883 ms: T06 bloco  51 tem: [<--bloco 0051-------------------------------------------------->]
+ 7883 ms: T06 bloco 204 tem: [<--bloco 0204-------------------------------------------------->]
+ 7883 ms: T06 escrevendo bloco 204
+ 7937 ms: T07 leu   bloco 188
+ 7937 ms: T07 bloco  67 tem: [<--bloco 0067-------------------------------------------------->]
+ 7937 ms: T07 bloco 188 tem: [<--bloco 0188-------------------------------------------------->]
+ 7937 ms: T07 escrevendo bloco 188
+ 7990 ms: T08 leu   bloco 172
+ 7990 ms: T08 bloco  83 tem: [<--bloco 0083-------------------------------------------------->]
+ 7990 ms: T08 bloco 172 tem: [<--bloco 0172-------------------------------------------------->]
+ 7990 ms: T08 escrevendo bloco 172
+ 8041 ms: T09 leu   bloco 156
+ 8041 ms: T09 bloco  99 tem: [<--bloco 0099-------------------------------------------------->]
+ 8041 ms: T09 bloco 156 tem: [<--bloco 0156-------------------------------------------------->]
+ 8041 ms: T09 escrevendo bloco 156
+ 8092 ms: T10 leu   bloco 140
+ 8092 ms: T10 bloco 115 tem: [<--bloco 0115-------------------------------------------------->]
+ 8092 ms: T10 bloco 140 tem: [<--bloco 0140-------------------------------------------------->]
+ 8092 ms: T10 escrevendo bloco 140
+ 8254 ms: T03 escreveu   bloco 252
+ 8254 ms: T03 escrevendo bloco   3
+ 8312 ms: T04 escreveu   bloco 236
+ 8312 ms: T04 escrevendo bloco  19
+ 8369 ms: T05 escreveu   bloco 220
+ 8369 ms: T05 escrevendo bloco  35
+ 8416 ms: T06 escreveu   bloco 204
+ 8416 ms: T06 escrevendo bloco  51
+ 8463 ms: T07 escreveu   bloco 188
+ 8463 ms: T07 escrevendo bloco  67
+ 8524 ms: T08 escreveu   bloco 172
+ 8524 ms: T08 escrevendo bloco  83
+ 8577 ms: T09 escreveu   bloco 156
+ 8577 ms: T09 escrevendo bloco  99
+ 8646 ms: T10 escreveu   bloco 140
+ 8646 ms: T10 escrevendo bloco 115
+ 8843 ms: T03 escreveu   bloco   3
+ 8843 ms: T03 lendo bloco   4
+ 8896 ms: T04 escreveu   bloco  19
+ 8896 ms: T04 lendo bloco  20
+ 8951 ms: T05 escreveu   bloco  35
+ 8951 ms: T05 lendo bloco  36
+ 9012 ms: T06 escreveu   bloco  51
+ 9012 ms: T06 lendo bloco  52
+ 9067 ms: T07 escreveu   bloco  67
+ 9067 ms: T07 lendo bloco  68
+ 9115 ms: T08 escreveu   bloco  83
+ 9115 ms: T08 lendo bloco  84
+ 9172 ms: T09 escreveu   bloco  99
+ 9172 ms: T09 lendo bloco 100
+ 9225 ms: T10 escreveu   bloco 115
+ 9225 ms: T10 lendo bloco 116
+ 9372 ms: T03 leu   bloco   4
+ 9372 ms: T03 lendo bloco 251
+ 9424 ms: T04 leu   bloco  20
+ 9424 ms: T04 lendo bloco 235
+ 9484 ms: T05 leu   bloco  36
+ 9484 ms: T05 lendo bloco 219
+ 9540 ms: T06 leu   bloco  52
+ 9540 ms: T06 lendo bloco 203
+ 9611 ms: T07 leu   bloco  68
+ 9611 ms: T07 lendo bloco 187
+ 9675 ms: T08 leu   bloco  84
+ 9675 ms: T08 lendo bloco 171
+ 9721 ms: T09 leu   bloco 100
+ 9721 ms: T09 lendo bloco 155
+ 9767 ms: T10 leu   bloco 116
+ 9767 ms: T10 lendo bloco 139
+ 9955 ms: T03 leu   bloco 251
+ 9955 ms: T03 bloco   4 tem: [<--bloco 0004-------------------------------------------------->]
+ 9955 ms: T03 bloco 251 tem: [<--bloco 0251-------------------------------------------------->]
+ 9955 ms: T03 escrevendo bloco 251
+10009 ms: T04 leu   bloco 235
+10009 ms: T04 bloco  20 tem: [<--bloco 0020-------------------------------------------------->]
+10009 ms: T04 bloco 235 tem: [<--bloco 0235-------------------------------------------------->]
+10009 ms: T04 escrevendo bloco 235
+10060 ms: T05 leu   bloco 219
+10060 ms: T05 bloco  36 tem: [<--bloco 0036-------------------------------------------------->]
+10060 ms: T05 bloco 219 tem: [<--bloco 0219-------------------------------------------------->]
+10060 ms: T05 escrevendo bloco 219
+10131 ms: T06 leu   bloco 203
+10131 ms: T06 bloco  52 tem: [<--bloco 0052-------------------------------------------------->]
+10131 ms: T06 bloco 203 tem: [<--bloco 0203-------------------------------------------------->]
+10131 ms: T06 escrevendo bloco 203
+10188 ms: T07 leu   bloco 187
+10188 ms: T07 bloco  68 tem: [<--bloco 0068-------------------------------------------------->]
+10188 ms: T07 bloco 187 tem: [<--bloco 0187-------------------------------------------------->]
+10188 ms: T07 escrevendo bloco 187
+10245 ms: T08 leu   bloco 171
+10245 ms: T08 bloco  84 tem: [<--bloco 0084-------------------------------------------------->]
+10245 ms: T08 bloco 171 tem: [<--bloco 0171-------------------------------------------------->]
+10245 ms: T08 escrevendo bloco 171
+10291 ms: T09 leu   bloco 155
+10291 ms: T09 bloco 100 tem: [<--bloco 0100-------------------------------------------------->]
+10291 ms: T09 bloco 155 tem: [<--bloco 0155-------------------------------------------------->]
+10291 ms: T09 escrevendo bloco 155
+10363 ms: T10 leu   bloco 139
+10363 ms: T10 bloco 116 tem: [<--bloco 0116-------------------------------------------------->]
+10363 ms: T10 bloco 139 tem: [<--bloco 0139-------------------------------------------------->]
+10363 ms: T10 escrevendo bloco 139
+10530 ms: T03 escreveu   bloco 251
+10530 ms: T03 escrevendo bloco   4
+10588 ms: T04 escreveu   bloco 235
+10588 ms: T04 escrevendo bloco  20
+10634 ms: T05 escreveu   bloco 219
+10634 ms: T05 escrevendo bloco  36
+10700 ms: T06 escreveu   bloco 203
+10700 ms: T06 escrevendo bloco  52
+10772 ms: T07 escreveu   bloco 187
+10772 ms: T07 escrevendo bloco  68
+10825 ms: T08 escreveu   bloco 171
+10825 ms: T08 escrevendo bloco  84
+10885 ms: T09 escreveu   bloco 155
+10885 ms: T09 escrevendo bloco 100
+10952 ms: T10 escreveu   bloco 139
+10952 ms: T10 escrevendo bloco 116
+11134 ms: T03 escreveu   bloco   4
+11134 ms: T03 lendo bloco   5
+11198 ms: T04 escreveu   bloco  20
+11198 ms: T04 lendo bloco  21
+11251 ms: T05 escreveu   bloco  36
+11251 ms: T05 lendo bloco  37
+11311 ms: T06 escreveu   bloco  52
+11311 ms: T06 lendo bloco  53
+11372 ms: T07 escreveu   bloco  68
+11372 ms: T07 lendo bloco  69
+11433 ms: T08 escreveu   bloco  84
+11433 ms: T08 lendo bloco  85
+11501 ms: T09 escreveu   bloco 100
+11501 ms: T09 lendo bloco 101
+11562 ms: T10 escreveu   bloco 116
+11562 ms: T10 lendo bloco 117
+11729 ms: T03 leu   bloco   5
+11729 ms: T03 lendo bloco 250
+11783 ms: T04 leu   bloco  21
+11783 ms: T04 lendo bloco 234
+11851 ms: T05 leu   bloco  37
+11851 ms: T05 lendo bloco 218
+11912 ms: T06 leu   bloco  53
+11912 ms: T06 lendo bloco 202
+11958 ms: T07 leu   bloco  69
+11958 ms: T07 lendo bloco 186
+12027 ms: T08 leu   bloco  85
+12027 ms: T08 lendo bloco 170
+12089 ms: T09 leu   bloco 101
+12089 ms: T09 lendo bloco 154
+12148 ms: T10 leu   bloco 117
+12148 ms: T10 lendo bloco 138
+12323 ms: T03 leu   bloco 250
+12323 ms: T03 bloco   5 tem: [<--bloco 0005-------------------------------------------------->]
+12323 ms: T03 bloco 250 tem: [<--bloco 0250-------------------------------------------------->]
+12323 ms: T03 escrevendo bloco 250
+12387 ms: T04 leu   bloco 234
+12387 ms: T04 bloco  21 tem: [<--bloco 0021-------------------------------------------------->]
+12387 ms: T04 bloco 234 tem: [<--bloco 0234-------------------------------------------------->]
+12387 ms: T04 escrevendo bloco 234
+12444 ms: T05 leu   bloco 218
+12444 ms: T05 bloco  37 tem: [<--bloco 0037-------------------------------------------------->]
+12444 ms: T05 bloco 218 tem: [<--bloco 0218-------------------------------------------------->]
+12444 ms: T05 escrevendo bloco 218
+12502 ms: T06 leu   bloco 202
+12502 ms: T06 bloco  53 tem: [<--bloco 0053-------------------------------------------------->]
+12502 ms: T06 bloco 202 tem: [<--bloco 0202-------------------------------------------------->]
+12502 ms: T06 escrevendo bloco 202
+12573 ms: T07 leu   bloco 186
+12573 ms: T07 bloco  69 tem: [<--bloco 0069-------------------------------------------------->]
+12573 ms: T07 bloco 186 tem: [<--bloco 0186-------------------------------------------------->]
+12573 ms: T07 escrevendo bloco 186
+12630 ms: T08 leu   bloco 170
+12630 ms: T08 bloco  85 tem: [<--bloco 0085-------------------------------------------------->]
+12630 ms: T08 bloco 170 tem: [<--bloco 0170-------------------------------------------------->]
+12630 ms: T08 escrevendo bloco 170
+12688 ms: T09 leu   bloco 154
+12688 ms: T09 bloco 101 tem: [<--bloco 0101-------------------------------------------------->]
+12688 ms: T09 bloco 154 tem: [<--bloco 0154-------------------------------------------------->]
+12688 ms: T09 escrevendo bloco 154
+12751 ms: T10 leu   bloco 138
+12751 ms: T10 bloco 117 tem: [<--bloco 0117-------------------------------------------------->]
+12751 ms: T10 bloco 138 tem: [<--bloco 0138-------------------------------------------------->]
+12751 ms: T10 escrevendo bloco 138
+12919 ms: T03 escreveu   bloco 250
+12919 ms: T03 escrevendo bloco   5
+12973 ms: T04 escreveu   bloco 234
+12973 ms: T04 escrevendo bloco  21
+13029 ms: T05 escreveu   bloco 218
+13029 ms: T05 escrevendo bloco  37
+13095 ms: T06 escreveu   bloco 202
+13095 ms: T06 escrevendo bloco  53
+13152 ms: T07 escreveu   bloco 186
+13152 ms: T07 escrevendo bloco  69
+13218 ms: T08 escreveu   bloco 170
+13218 ms: T08 escrevendo bloco  85
+13274 ms: T09 escreveu   bloco 154
+13274 ms: T09 escrevendo bloco 101
+13341 ms: T10 escreveu   bloco 138
+13341 ms: T10 escrevendo bloco 117
+13521 ms: T03 escreveu   bloco   5
+13521 ms: T03 lendo bloco   6
+13581 ms: T04 escreveu   bloco  21
+13581 ms: T04 lendo bloco  22
+13635 ms: T05 escreveu   bloco  37
+13635 ms: T05 lendo bloco  38
+13706 ms: T06 escreveu   bloco  53
+13706 ms: T06 lendo bloco  54
+13753 ms: T07 escreveu   bloco  69
+13753 ms: T07 lendo bloco  70
+13801 ms: T08 escreveu   bloco  85
+13801 ms: T08 lendo bloco  86
+13856 ms: T09 escreveu   bloco 101
+13856 ms: T09 lendo bloco 102
+13924 ms: T10 escreveu   bloco 117
+13924 ms: T10 lendo bloco 118
+14078 ms: T03 leu   bloco   6
+14078 ms: T03 lendo bloco 249
+14128 ms: T04 leu   bloco  22
+14128 ms: T04 lendo bloco 233
+14180 ms: T05 leu   bloco  38
+14180 ms: T05 lendo bloco 217
+14229 ms: T06 leu   bloco  54
+14229 ms: T06 lendo bloco 201
+14275 ms: T07 leu   bloco  70
+14275 ms: T07 lendo bloco 185
+14344 ms: T08 leu   bloco  86
+14344 ms: T08 lendo bloco 169
+14406 ms: T09 leu   bloco 102
+14406 ms: T09 lendo bloco 153
+14452 ms: T10 leu   bloco 118
+14452 ms: T10 lendo bloco 137
+14634 ms: T03 leu   bloco 249
+14634 ms: T03 bloco   6 tem: [<--bloco 0006-------------------------------------------------->]
+14634 ms: T03 bloco 249 tem: [<--bloco 0249-------------------------------------------------->]
+14634 ms: T03 escrevendo bloco 249
+14704 ms: T04 leu   bloco 233
+14704 ms: T04 bloco  22 tem: [<--bloco 0022-------------------------------------------------->]
+14704 ms: T04 bloco 233 tem: [<--bloco 0233-------------------------------------------------->]
+14704 ms: T04 escrevendo bloco 233
+14763 ms: T05 leu   bloco 217
+14763 ms: T05 bloco  38 tem: [<--bloco 0038-------------------------------------------------->]
+14763 ms: T05 bloco 217 tem: [<--bloco 0217-------------------------------------------------->]
+14763 ms: T05 escrevendo bloco 217
+14822 ms: T06 leu   bloco 201
+14822 ms: T06 bloco  54 tem: [<--bloco 0054-------------------------------------------------->]
+14822 ms: T06 bloco 201 tem: [<--bloco 0201-------------------------------------------------->]
+14822 ms: T06 escrevendo bloco 201
+14873 ms: T07 leu   bloco 185
+14873 ms: T07 bloco  70 tem: [<--bloco 0070-------------------------------------------------->]
+14873 ms: T07 bloco 185 tem: [<--bloco 0185-------------------------------------------------->]
+14873 ms: T07 escrevendo bloco 185
+14940 ms: T08 leu   bloco 169
+14940 ms: T08 bloco  86 tem: [<--bloco 0086-------------------------------------------------->]
+14940 ms: T08 bloco 169 tem: [<--bloco 0169-------------------------------------------------->]
+14940 ms: T08 escrevendo bloco 169
+15012 ms: T09 leu   bloco 153
+15012 ms: T09 bloco 102 tem: [<--bloco 0102-------------------------------------------------->]
+15012 ms: T09 bloco 153 tem: [<--bloco 0153-------------------------------------------------->]
+15012 ms: T09 escrevendo bloco 153
+15083 ms: T10 leu   bloco 137
+15083 ms: T10 bloco 118 tem: [<--bloco 0118-------------------------------------------------->]
+15083 ms: T10 bloco 137 tem: [<--bloco 0137-------------------------------------------------->]
+15083 ms: T10 escrevendo bloco 137
+15235 ms: T03 escreveu   bloco 249
+15235 ms: T03 escrevendo bloco   6
+15287 ms: T04 escreveu   bloco 233
+15287 ms: T04 escrevendo bloco  22
+15346 ms: T05 escreveu   bloco 217
+15346 ms: T05 escrevendo bloco  38
+15403 ms: T06 escreveu   bloco 201
+15403 ms: T06 escrevendo bloco  54
+15473 ms: T07 escreveu   bloco 185
+15473 ms: T07 escrevendo bloco  70
+15540 ms: T08 escreveu   bloco 169
+15540 ms: T08 escrevendo bloco  86
+15591 ms: T09 escreveu   bloco 153
+15591 ms: T09 escrevendo bloco 102
+15640 ms: T10 escreveu   bloco 137
+15640 ms: T10 escrevendo bloco 118
+15816 ms: T03 escreveu   bloco   6
+15816 ms: T03 lendo bloco   7
+15872 ms: T04 escreveu   bloco  22
+15872 ms: T04 lendo bloco  23
+15943 ms: T05 escreveu   bloco  38
+15943 ms: T05 lendo bloco  39
+15997 ms: T06 escreveu   bloco  54
+15997 ms: T06 lendo bloco  55
+16052 ms: T07 escreveu   bloco  70
+16052 ms: T07 lendo bloco  71
+16103 ms: T08 escreveu   bloco  86
+16103 ms: T08 lendo bloco  87
+16176 ms: T09 escreveu   bloco 102
+16176 ms: T09 lendo bloco 103
+16238 ms: T10 escreveu   bloco 118
+16238 ms: T10 lendo bloco 119
+16391 ms: T03 leu   bloco   7
+16391 ms: T03 lendo bloco 248
+16443 ms: T04 leu   bloco  23
+16443 ms: T04 lendo bloco 232
+16504 ms: T05 leu   bloco  39
+16504 ms: T05 lendo bloco 216
+16552 ms: T06 leu   bloco  55
+16552 ms: T06 lendo bloco 200
+16623 ms: T07 leu   bloco  71
+16623 ms: T07 lendo bloco 184
+16670 ms: T08 leu   bloco  87
+16670 ms: T08 lendo bloco 168
+16719 ms: T09 leu   bloco 103
+16719 ms: T09 lendo bloco 152
+16774 ms: T10 leu   bloco 119
+16774 ms: T10 lendo bloco 136
+16962 ms: T03 leu   bloco 248
+16962 ms: T03 bloco   7 tem: [<--bloco 0007-------------------------------------------------->]
+16962 ms: T03 bloco 248 tem: [<--bloco 0248-------------------------------------------------->]
+16962 ms: T03 escrevendo bloco 248
+17021 ms: T04 leu   bloco 232
+17021 ms: T04 bloco  23 tem: [<--bloco 0023-------------------------------------------------->]
+17021 ms: T04 bloco 232 tem: [<--bloco 0232-------------------------------------------------->]
+17021 ms: T04 escrevendo bloco 232
+17085 ms: T05 leu   bloco 216
+17085 ms: T05 bloco  39 tem: [<--bloco 0039-------------------------------------------------->]
+17085 ms: T05 bloco 216 tem: [<--bloco 0216-------------------------------------------------->]
+17085 ms: T05 escrevendo bloco 216
+17154 ms: T06 leu   bloco 200
+17154 ms: T06 bloco  55 tem: [<--bloco 0055-------------------------------------------------->]
+17154 ms: T06 bloco 200 tem: [<--bloco 0200-------------------------------------------------->]
+17154 ms: T06 escrevendo bloco 200
+17204 ms: T07 leu   bloco 184
+17204 ms: T07 bloco  71 tem: [<--bloco 0071-------------------------------------------------->]
+17204 ms: T07 bloco 184 tem: [<--bloco 0184-------------------------------------------------->]
+17204 ms: T07 escrevendo bloco 184
+17269 ms: T08 leu   bloco 168
+17269 ms: T08 bloco  87 tem: [<--bloco 0087-------------------------------------------------->]
+17269 ms: T08 bloco 168 tem: [<--bloco 0168-------------------------------------------------->]
+17269 ms: T08 escrevendo bloco 168
+17336 ms: T09 leu   bloco 152
+17336 ms: T09 bloco 103 tem: [<--bloco 0103-------------------------------------------------->]
+17336 ms: T09 bloco 152 tem: [<--bloco 0152-------------------------------------------------->]
+17336 ms: T09 escrevendo bloco 152
+17386 ms: T10 leu   bloco 136
+17386 ms: T10 bloco 119 tem: [<--bloco 0119-------------------------------------------------->]
+17386 ms: T10 bloco 136 tem: [<--bloco 0136-------------------------------------------------->]
+17386 ms: T10 escrevendo bloco 136
+17559 ms: T03 escreveu   bloco 248
+17559 ms: T03 escrevendo bloco   7
+17609 ms: T04 escreveu   bloco 232
+17609 ms: T04 escrevendo bloco  23
+17670 ms: T05 escreveu   bloco 216
+17670 ms: T05 escrevendo bloco  39
+17734 ms: T06 escreveu   bloco 200
+17734 ms: T06 escrevendo bloco  55
+17806 ms: T07 escreveu   bloco 184
+17806 ms: T07 escrevendo bloco  71
+17868 ms: T08 escreveu   bloco 168
+17868 ms: T08 escrevendo bloco  87
+17937 ms: T09 escreveu   bloco 152
+17937 ms: T09 escrevendo bloco 103
+17985 ms: T10 escreveu   bloco 136
+17985 ms: T10 escrevendo bloco 119
+18177 ms: T03 escreveu   bloco   7
+18177 ms: T03 lendo bloco   8
+18243 ms: T04 escreveu   bloco  23
+18243 ms: T04 lendo bloco  24
+18299 ms: T05 escreveu   bloco  39
+18299 ms: T05 lendo bloco  40
+18352 ms: T06 escreveu   bloco  55
+18352 ms: T06 lendo bloco  56
+18420 ms: T07 escreveu   bloco  71
+18420 ms: T07 lendo bloco  72
+18472 ms: T08 escreveu   bloco  87
+18472 ms: T08 lendo bloco  88
+18536 ms: T09 escreveu   bloco 103
+18536 ms: T09 lendo bloco 104
+18583 ms: T10 escreveu   bloco 119
+18583 ms: T10 lendo bloco 120
+18742 ms: T03 leu   bloco   8
+18742 ms: T03 lendo bloco 247
+18790 ms: T04 leu   bloco  24
+18790 ms: T04 lendo bloco 231
+18839 ms: T05 leu   bloco  40
+18839 ms: T05 lendo bloco 215
+18891 ms: T06 leu   bloco  56
+18891 ms: T06 lendo bloco 199
+18941 ms: T07 leu   bloco  72
+18941 ms: T07 lendo bloco 183
+18990 ms: T08 leu   bloco  88
+18990 ms: T08 lendo bloco 167
+19051 ms: T09 leu   bloco 104
+19051 ms: T09 lendo bloco 151
+19119 ms: T10 leu   bloco 120
+19119 ms: T10 lendo bloco 135
+19295 ms: T03 leu   bloco 247
+19295 ms: T03 bloco   8 tem: [<--bloco 0008-------------------------------------------------->]
+19295 ms: T03 bloco 247 tem: [<--bloco 0247-------------------------------------------------->]
+19295 ms: T03 escrevendo bloco 247
+19344 ms: T04 leu   bloco 231
+19344 ms: T04 bloco  24 tem: [<--bloco 0024-------------------------------------------------->]
+19344 ms: T04 bloco 231 tem: [<--bloco 0231-------------------------------------------------->]
+19344 ms: T04 escrevendo bloco 231
+19409 ms: T05 leu   bloco 215
+19409 ms: T05 bloco  40 tem: [<--bloco 0040-------------------------------------------------->]
+19409 ms: T05 bloco 215 tem: [<--bloco 0215-------------------------------------------------->]
+19409 ms: T05 escrevendo bloco 215
+19472 ms: T06 leu   bloco 199
+19472 ms: T06 bloco  56 tem: [<--bloco 0056-------------------------------------------------->]
+19472 ms: T06 bloco 199 tem: [<--bloco 0199-------------------------------------------------->]
+19472 ms: T06 escrevendo bloco 199
+19540 ms: T07 leu   bloco 183
+19540 ms: T07 bloco  72 tem: [<--bloco 0072-------------------------------------------------->]
+19540 ms: T07 bloco 183 tem: [<--bloco 0183-------------------------------------------------->]
+19540 ms: T07 escrevendo bloco 183
+19596 ms: T08 leu   bloco 167
+19596 ms: T08 bloco  88 tem: [<--bloco 0088-------------------------------------------------->]
+19596 ms: T08 bloco 167 tem: [<--bloco 0167-------------------------------------------------->]
+19596 ms: T08 escrevendo bloco 167
+19660 ms: T09 leu   bloco 151
+19660 ms: T09 bloco 104 tem: [<--bloco 0104-------------------------------------------------->]
+19660 ms: T09 bloco 151 tem: [<--bloco 0151-------------------------------------------------->]
+19660 ms: T09 escrevendo bloco 151
+19721 ms: T10 leu   bloco 135
+19721 ms: T10 bloco 120 tem: [<--bloco 0120-------------------------------------------------->]
+19721 ms: T10 bloco 135 tem: [<--bloco 0135-------------------------------------------------->]
+19721 ms: T10 escrevendo bloco 135
+19885 ms: T03 escreveu   bloco 247
+19885 ms: T03 escrevendo bloco   8
+19936 ms: T04 escreveu   bloco 231
+19936 ms: T04 escrevendo bloco  24
+19989 ms: T05 escreveu   bloco 215
+19989 ms: T05 escrevendo bloco  40
+20046 ms: T06 escreveu   bloco 199
+20046 ms: T06 escrevendo bloco  56
+20114 ms: T07 escreveu   bloco 183
+20114 ms: T07 escrevendo bloco  72
+20185 ms: T08 escreveu   bloco 167
+20185 ms: T08 escrevendo bloco  88
+20244 ms: T09 escreveu   bloco 151
+20244 ms: T09 escrevendo bloco 104
+20307 ms: T10 escreveu   bloco 135
+20307 ms: T10 escrevendo bloco 120
+20488 ms: T03 escreveu   bloco   8
+20488 ms: T03 lendo bloco   9
+20553 ms: T04 escreveu   bloco  24
+20553 ms: T04 lendo bloco  25
+20622 ms: T05 escreveu   bloco  40
+20622 ms: T05 lendo bloco  41
+20676 ms: T06 escreveu   bloco  56
+20676 ms: T06 lendo bloco  57
+20748 ms: T07 escreveu   bloco  72
+20748 ms: T07 lendo bloco  73
+20804 ms: T08 escreveu   bloco  88
+20804 ms: T08 lendo bloco  89
+20857 ms: T09 escreveu   bloco 104
+20857 ms: T09 lendo bloco 105
+20914 ms: T10 escreveu   bloco 120
+20914 ms: T10 lendo bloco 121
+21072 ms: T03 leu   bloco   9
+21072 ms: T03 lendo bloco 246
+21125 ms: T04 leu   bloco  25
+21125 ms: T04 lendo bloco 230
+21183 ms: T05 leu   bloco  41
+21183 ms: T05 lendo bloco 214
+21241 ms: T06 leu   bloco  57
+21241 ms: T06 lendo bloco 198
+21294 ms: T07 leu   bloco  73
+21294 ms: T07 lendo bloco 182
+21341 ms: T08 leu   bloco  89
+21341 ms: T08 lendo bloco 166
+21395 ms: T09 leu   bloco 105
+21395 ms: T09 lendo bloco 150
+21461 ms: T10 leu   bloco 121
+21461 ms: T10 lendo bloco 134
+21627 ms: T03 leu   bloco 246
+21627 ms: T03 bloco   9 tem: [<--bloco 0009-------------------------------------------------->]
+21627 ms: T03 bloco 246 tem: [<--bloco 0246-------------------------------------------------->]
+21627 ms: T03 escrevendo bloco 246
+21696 ms: T04 leu   bloco 230
+21696 ms: T04 bloco  25 tem: [<--bloco 0025-------------------------------------------------->]
+21696 ms: T04 bloco 230 tem: [<--bloco 0230-------------------------------------------------->]
+21696 ms: T04 escrevendo bloco 230
+21749 ms: T05 leu   bloco 214
+21749 ms: T05 bloco  41 tem: [<--bloco 0041-------------------------------------------------->]
+21749 ms: T05 bloco 214 tem: [<--bloco 0214-------------------------------------------------->]
+21749 ms: T05 escrevendo bloco 214
+21819 ms: T06 leu   bloco 198
+21819 ms: T06 bloco  57 tem: [<--bloco 0057-------------------------------------------------->]
+21819 ms: T06 bloco 198 tem: [<--bloco 0198-------------------------------------------------->]
+21819 ms: T06 escrevendo bloco 198
+21872 ms: T07 leu   bloco 182
+21872 ms: T07 bloco  73 tem: [<--bloco 0073-------------------------------------------------->]
+21872 ms: T07 bloco 182 tem: [<--bloco 0182-------------------------------------------------->]
+21872 ms: T07 escrevendo bloco 182
+21943 ms: T08 leu   bloco 166
+21943 ms: T08 bloco  89 tem: [<--bloco 0089-------------------------------------------------->]
+21943 ms: T08 bloco 166 tem: [<--bloco 0166-------------------------------------------------->]
+21943 ms: T08 escrevendo bloco 166
+22001 ms: T09 leu   bloco 150
+22001 ms: T09 bloco 105 tem: [<--bloco 0105-------------------------------------------------->]
+22001 ms: T09 bloco 150 tem: [<--bloco 0150-------------------------------------------------->]
+22001 ms: T09 escrevendo bloco 150
+22069 ms: T10 leu   bloco 134
+22069 ms: T10 bloco 121 tem: [<--bloco 0121-------------------------------------------------->]
+22069 ms: T10 bloco 134 tem: [<--bloco 0134-------------------------------------------------->]
+22069 ms: T10 escrevendo bloco 134
+22218 ms: T03 escreveu   bloco 246
+22218 ms: T03 escrevendo bloco   9
+22280 ms: T04 escreveu   bloco 230
+22280 ms: T04 escrevendo bloco  25
+22328 ms: T05 escreveu   bloco 214
+22328 ms: T05 escrevendo bloco  41
+22392 ms: T06 escreveu   bloco 198
+22392 ms: T06 escrevendo bloco  57
+22452 ms: T07 escreveu   bloco 182
+22452 ms: T07 escrevendo bloco  73
+22511 ms: T08 escreveu   bloco 166
+22511 ms: T08 escrevendo bloco  89
+22564 ms: T09 escreveu   bloco 150
+22564 ms: T09 escrevendo bloco 105
+22611 ms: T10 escreveu   bloco 134
+22611 ms: T10 escrevendo bloco 121
+22778 ms: T03 escreveu   bloco   9
+22778 ms: T03 lendo bloco  10
+22851 ms: T04 escreveu   bloco  25
+22851 ms: T04 lendo bloco  26
+22900 ms: T05 escreveu   bloco  41
+22900 ms: T05 lendo bloco  42
+22950 ms: T06 escreveu   bloco  57
+22950 ms: T06 lendo bloco  58
+23004 ms: T07 escreveu   bloco  73
+23004 ms: T07 lendo bloco  74
+23059 ms: T08 escreveu   bloco  89
+23059 ms: T08 lendo bloco  90
+23116 ms: T09 escreveu   bloco 105
+23116 ms: T09 lendo bloco 106
+23178 ms: T10 escreveu   bloco 121
+23178 ms: T10 lendo bloco 122
+23340 ms: T03 leu   bloco  10
+23340 ms: T03 lendo bloco 245
+23409 ms: T04 leu   bloco  26
+23409 ms: T04 lendo bloco 229
+23480 ms: T05 leu   bloco  42
+23480 ms: T05 lendo bloco 213
+23545 ms: T06 leu   bloco  58
+23545 ms: T06 lendo bloco 197
+23612 ms: T07 leu   bloco  74
+23612 ms: T07 lendo bloco 181
+23660 ms: T08 leu   bloco  90
+23660 ms: T08 lendo bloco 165
+23714 ms: T09 leu   bloco 106
+23714 ms: T09 lendo bloco 149
+23782 ms: T10 leu   bloco 122
+23782 ms: T10 lendo bloco 133
+23967 ms: T03 leu   bloco 245
+23967 ms: T03 bloco  10 tem: [<--bloco 0010-------------------------------------------------->]
+23967 ms: T03 bloco 245 tem: [<--bloco 0245-------------------------------------------------->]
+23967 ms: T03 escrevendo bloco 245
+24029 ms: T04 leu   bloco 229
+24029 ms: T04 bloco  26 tem: [<--bloco 0026-------------------------------------------------->]
+24029 ms: T04 bloco 229 tem: [<--bloco 0229-------------------------------------------------->]
+24029 ms: T04 escrevendo bloco 229
+24094 ms: T05 leu   bloco 213
+24094 ms: T05 bloco  42 tem: [<--bloco 0042-------------------------------------------------->]
+24094 ms: T05 bloco 213 tem: [<--bloco 0213-------------------------------------------------->]
+24094 ms: T05 escrevendo bloco 213
+24146 ms: T06 leu   bloco 197
+24146 ms: T06 bloco  58 tem: [<--bloco 0058-------------------------------------------------->]
+24146 ms: T06 bloco 197 tem: [<--bloco 0197-------------------------------------------------->]
+24146 ms: T06 escrevendo bloco 197
+24204 ms: T07 leu   bloco 181
+24204 ms: T07 bloco  74 tem: [<--bloco 0074-------------------------------------------------->]
+24204 ms: T07 bloco 181 tem: [<--bloco 0181-------------------------------------------------->]
+24204 ms: T07 escrevendo bloco 181
+24251 ms: T08 leu   bloco 165
+24251 ms: T08 bloco  90 tem: [<--bloco 0090-------------------------------------------------->]
+24251 ms: T08 bloco 165 tem: [<--bloco 0165-------------------------------------------------->]
+24251 ms: T08 escrevendo bloco 165
+24321 ms: T09 leu   bloco 149
+24321 ms: T09 bloco 106 tem: [<--bloco 0106-------------------------------------------------->]
+24321 ms: T09 bloco 149 tem: [<--bloco 0149-------------------------------------------------->]
+24321 ms: T09 escrevendo bloco 149
+24374 ms: T10 leu   bloco 133
+24374 ms: T10 bloco 122 tem: [<--bloco 0122-------------------------------------------------->]
+24374 ms: T10 bloco 133 tem: [<--bloco 0133-------------------------------------------------->]
+24374 ms: T10 escrevendo bloco 133
+24536 ms: T03 escreveu   bloco 245
+24536 ms: T03 escrevendo bloco  10
+24609 ms: T04 escreveu   bloco 229
+24609 ms: T04 escrevendo bloco  26
+24681 ms: T05 escreveu   bloco 213
+24681 ms: T05 escrevendo bloco  42
+24751 ms: T06 escreveu   bloco 197
+24751 ms: T06 escrevendo bloco  58
+24806 ms: T07 escreveu   bloco 181
+24806 ms: T07 escrevendo bloco  74
+24856 ms: T08 escreveu   bloco 165
+24856 ms: T08 escrevendo bloco  90
+24923 ms: T09 escreveu   bloco 149
+24923 ms: T09 escrevendo bloco 106
+24983 ms: T10 escreveu   bloco 133
+24983 ms: T10 escrevendo bloco 122
+25145 ms: T03 escreveu   bloco  10
+25145 ms: T03 lendo bloco  11
+25215 ms: T04 escreveu   bloco  26
+25215 ms: T04 lendo bloco  27
+25277 ms: T05 escreveu   bloco  42
+25277 ms: T05 lendo bloco  43
+25331 ms: T06 escreveu   bloco  58
+25331 ms: T06 lendo bloco  59
+25382 ms: T07 escreveu   bloco  74
+25382 ms: T07 lendo bloco  75
+25454 ms: T08 escreveu   bloco  90
+25454 ms: T08 lendo bloco  91
+25525 ms: T09 escreveu   bloco 106
+25525 ms: T09 lendo bloco 107
+25588 ms: T10 escreveu   bloco 122
+25588 ms: T10 lendo bloco 123
+25752 ms: T03 leu   bloco  11
+25752 ms: T03 lendo bloco 244
+25820 ms: T04 leu   bloco  27
+25820 ms: T04 lendo bloco 228
+25875 ms: T05 leu   bloco  43
+25875 ms: T05 lendo bloco 212
+25928 ms: T06 leu   bloco  59
+25928 ms: T06 lendo bloco 196
+25999 ms: T07 leu   bloco  75
+25999 ms: T07 lendo bloco 180
+26063 ms: T08 leu   bloco  91
+26063 ms: T08 lendo bloco 164
+26112 ms: T09 leu   bloco 107
+26112 ms: T09 lendo bloco 148
+26178 ms: T10 leu   bloco 123
+26178 ms: T10 lendo bloco 132
+26339 ms: T03 leu   bloco 244
+26339 ms: T03 bloco  11 tem: [<--bloco 0011-------------------------------------------------->]
+26339 ms: T03 bloco 244 tem: [<--bloco 0244-------------------------------------------------->]
+26339 ms: T03 escrevendo bloco 244
+26405 ms: T04 leu   bloco 228
+26405 ms: T04 bloco  27 tem: [<--bloco 0027-------------------------------------------------->]
+26405 ms: T04 bloco 228 tem: [<--bloco 0228-------------------------------------------------->]
+26405 ms: T04 escrevendo bloco 228
+26477 ms: T05 leu   bloco 212
+26477 ms: T05 bloco  43 tem: [<--bloco 0043-------------------------------------------------->]
+26477 ms: T05 bloco 212 tem: [<--bloco 0212-------------------------------------------------->]
+26477 ms: T05 escrevendo bloco 212
+26534 ms: T06 leu   bloco 196
+26534 ms: T06 bloco  59 tem: [<--bloco 0059-------------------------------------------------->]
+26534 ms: T06 bloco 196 tem: [<--bloco 0196-------------------------------------------------->]
+26534 ms: T06 escrevendo bloco 196
+26597 ms: T07 leu   bloco 180
+26597 ms: T07 bloco  75 tem: [<--bloco 0075-------------------------------------------------->]
+26597 ms: T07 bloco 180 tem: [<--bloco 0180-------------------------------------------------->]
+26597 ms: T07 escrevendo bloco 180
+26663 ms: T08 leu   bloco 164
+26663 ms: T08 bloco  91 tem: [<--bloco 0091-------------------------------------------------->]
+26663 ms: T08 bloco 164 tem: [<--bloco 0164-------------------------------------------------->]
+26663 ms: T08 escrevendo bloco 164
+26727 ms: T09 leu   bloco 148
+26727 ms: T09 bloco 107 tem: [<--bloco 0107-------------------------------------------------->]
+26727 ms: T09 bloco 148 tem: [<--bloco 0148-------------------------------------------------->]
+26727 ms: T09 escrevendo bloco 148
+26777 ms: T10 leu   bloco 132
+26777 ms: T10 bloco 123 tem: [<--bloco 0123-------------------------------------------------->]
+26777 ms: T10 bloco 132 tem: [<--bloco 0132-------------------------------------------------->]
+26777 ms: T10 escrevendo bloco 132
+26945 ms: T03 escreveu   bloco 244
+26945 ms: T03 escrevendo bloco  11
+27005 ms: T04 escreveu   bloco 228
+27005 ms: T04 escrevendo bloco  27
+27053 ms: T05 escreveu   bloco 212
+27053 ms: T05 escrevendo bloco  43
+27124 ms: T06 escreveu   bloco 196
+27124 ms: T06 escrevendo bloco  59
+27187 ms: T07 escreveu   bloco 180
+27187 ms: T07 escrevendo bloco  75
+27251 ms: T08 escreveu   bloco 164
+27251 ms: T08 escrevendo bloco  91
+27310 ms: T09 escreveu   bloco 148
+27310 ms: T09 escrevendo bloco 107
+27376 ms: T10 escreveu   bloco 132
+27376 ms: T10 escrevendo bloco 123
+27549 ms: T03 escreveu   bloco  11
+27549 ms: T03 lendo bloco  12
+27619 ms: T04 escreveu   bloco  27
+27619 ms: T04 lendo bloco  28
+27667 ms: T05 escreveu   bloco  43
+27667 ms: T05 lendo bloco  44
+27733 ms: T06 escreveu   bloco  59
+27733 ms: T06 lendo bloco  60
+27797 ms: T07 escreveu   bloco  75
+27797 ms: T07 lendo bloco  76
+27865 ms: T08 escreveu   bloco  91
+27865 ms: T08 lendo bloco  92
+27921 ms: T09 escreveu   bloco 107
+27921 ms: T09 lendo bloco 108
+27976 ms: T10 escreveu   bloco 123
+27976 ms: T10 lendo bloco 124
+28136 ms: T03 leu   bloco  12
+28136 ms: T03 lendo bloco 243
+28197 ms: T04 leu   bloco  28
+28197 ms: T04 lendo bloco 227
+28259 ms: T05 leu   bloco  44
+28259 ms: T05 lendo bloco 211
+28312 ms: T06 leu   bloco  60
+28312 ms: T06 lendo bloco 195
+28361 ms: T07 leu   bloco  76
+28361 ms: T07 lendo bloco 179
+28423 ms: T08 leu   bloco  92
+28423 ms: T08 lendo bloco 163
+28469 ms: T09 leu   bloco 108
+28469 ms: T09 lendo bloco 147
+28521 ms: T10 leu   bloco 124
+28521 ms: T10 lendo bloco 131
+28685 ms: T03 leu   bloco 243
+28685 ms: T03 bloco  12 tem: [<--bloco 0012-------------------------------------------------->]
+28685 ms: T03 bloco 243 tem: [<--bloco 0243-------------------------------------------------->]
+28685 ms: T03 escrevendo bloco 243
+28754 ms: T04 leu   bloco 227
+28754 ms: T04 bloco  28 tem: [<--bloco 0028-------------------------------------------------->]
+28754 ms: T04 bloco 227 tem: [<--bloco 0227-------------------------------------------------->]
+28754 ms: T04 escrevendo bloco 227
+28814 ms: T05 leu   bloco 211
+28814 ms: T05 bloco  44 tem: [<--bloco 0044-------------------------------------------------->]
+28814 ms: T05 bloco 211 tem: [<--bloco 0211-------------------------------------------------->]
+28814 ms: T05 escrevendo bloco 211
+28883 ms: T06 leu   bloco 195
+28883 ms: T06 bloco  60 tem: [<--bloco 0060-------------------------------------------------->]
+28883 ms: T06 bloco 195 tem: [<--bloco 0195-------------------------------------------------->]
+28883 ms: T06 escrevendo bloco 195
+28945 ms: T07 leu   bloco 179
+28945 ms: T07 bloco  76 tem: [<--bloco 0076-------------------------------------------------->]
+28945 ms: T07 bloco 179 tem: [<--bloco 0179-------------------------------------------------->]
+28945 ms: T07 escrevendo bloco 179
+28997 ms: T08 leu   bloco 163
+28997 ms: T08 bloco  92 tem: [<--bloco 0092-------------------------------------------------->]
+28997 ms: T08 bloco 163 tem: [<--bloco 0163-------------------------------------------------->]
+28997 ms: T08 escrevendo bloco 163
+29044 ms: T09 leu   bloco 147
+29044 ms: T09 bloco 108 tem: [<--bloco 0108-------------------------------------------------->]
+29044 ms: T09 bloco 147 tem: [<--bloco 0147-------------------------------------------------->]
+29044 ms: T09 escrevendo bloco 147
+29094 ms: T10 leu   bloco 131
+29094 ms: T10 bloco 124 tem: [<--bloco 0124-------------------------------------------------->]
+29094 ms: T10 bloco 131 tem: [<--bloco 0131-------------------------------------------------->]
+29094 ms: T10 escrevendo bloco 131
+29259 ms: T03 escreveu   bloco 243
+29259 ms: T03 escrevendo bloco  12
+29331 ms: T04 escreveu   bloco 227
+29331 ms: T04 escrevendo bloco  28
+29379 ms: T05 escreveu   bloco 211
+29379 ms: T05 escrevendo bloco  44
+29433 ms: T06 escreveu   bloco 195
+29433 ms: T06 escrevendo bloco  60
+29496 ms: T07 escreveu   bloco 179
+29496 ms: T07 escrevendo bloco  76
+29552 ms: T08 escreveu   bloco 163
+29552 ms: T08 escrevendo bloco  92
+29623 ms: T09 escreveu   bloco 147
+29623 ms: T09 escrevendo bloco 108
+29674 ms: T10 escreveu   bloco 131
+29674 ms: T10 escrevendo bloco 124
+29837 ms: T03 escreveu   bloco  12
+29837 ms: T03 lendo bloco  13
+29904 ms: T04 escreveu   bloco  28
+29904 ms: T04 lendo bloco  29
+29972 ms: T05 escreveu   bloco  44
+29972 ms: T05 lendo bloco  45
+30044 ms: T06 escreveu   bloco  60
+30044 ms: T06 lendo bloco  61
+30106 ms: T07 escreveu   bloco  76
+30106 ms: T07 lendo bloco  77
+30153 ms: T08 escreveu   bloco  92
+30153 ms: T08 lendo bloco  93
+30202 ms: T09 escreveu   bloco 108
+30202 ms: T09 lendo bloco 109
+30251 ms: T10 escreveu   bloco 124
+30251 ms: T10 lendo bloco 125
+30410 ms: T03 leu   bloco  13
+30410 ms: T03 lendo bloco 242
+30471 ms: T04 leu   bloco  29
+30471 ms: T04 lendo bloco 226
+30526 ms: T05 leu   bloco  45
+30526 ms: T05 lendo bloco 210
+30587 ms: T06 leu   bloco  61
+30587 ms: T06 lendo bloco 194
+30638 ms: T07 leu   bloco  77
+30638 ms: T07 lendo bloco 178
+30690 ms: T08 leu   bloco  93
+30690 ms: T08 lendo bloco 162
+30758 ms: T09 leu   bloco 109
+30758 ms: T09 lendo bloco 146
+30814 ms: T10 leu   bloco 125
+30814 ms: T10 lendo bloco 130
+30969 ms: T03 leu   bloco 242
+30969 ms: T03 bloco  13 tem: [<--bloco 0013-------------------------------------------------->]
+30969 ms: T03 bloco 242 tem: [<--bloco 0242-------------------------------------------------->]
+30969 ms: T03 escrevendo bloco 242
+31025 ms: T04 leu   bloco 226
+31025 ms: T04 bloco  29 tem: [<--bloco 0029-------------------------------------------------->]
+31025 ms: T04 bloco 226 tem: [<--bloco 0226-------------------------------------------------->]
+31025 ms: T04 escrevendo bloco 226
+31078 ms: T05 leu   bloco 210
+31078 ms: T05 bloco  45 tem: [<--bloco 0045-------------------------------------------------->]
+31078 ms: T05 bloco 210 tem: [<--bloco 0210-------------------------------------------------->]
+31078 ms: T05 escrevendo bloco 210
+31143 ms: T06 leu   bloco 194
+31143 ms: T06 bloco  61 tem: [<--bloco 0061-------------------------------------------------->]
+31143 ms: T06 bloco 194 tem: [<--bloco 0194-------------------------------------------------->]
+31143 ms: T06 escrevendo bloco 194
+31201 ms: T07 leu   bloco 178
+31201 ms: T07 bloco  77 tem: [<--bloco 0077-------------------------------------------------->]
+31201 ms: T07 bloco 178 tem: [<--bloco 0178-------------------------------------------------->]
+31201 ms: T07 escrevendo bloco 178
+31251 ms: T08 leu   bloco 162
+31251 ms: T08 bloco  93 tem: [<--bloco 0093-------------------------------------------------->]
+31251 ms: T08 bloco 162 tem: [<--bloco 0162-------------------------------------------------->]
+31251 ms: T08 escrevendo bloco 162
+31317 ms: T09 leu   bloco 146
+31317 ms: T09 bloco 109 tem: [<--bloco 0109-------------------------------------------------->]
+31317 ms: T09 bloco 146 tem: [<--bloco 0146-------------------------------------------------->]
+31317 ms: T09 escrevendo bloco 146
+31365 ms: T10 leu   bloco 130
+31365 ms: T10 bloco 125 tem: [<--bloco 0125-------------------------------------------------->]
+31365 ms: T10 bloco 130 tem: [<--bloco 0130-------------------------------------------------->]
+31365 ms: T10 escrevendo bloco 130
+31518 ms: T03 escreveu   bloco 242
+31518 ms: T03 escrevendo bloco  13
+31586 ms: T04 escreveu   bloco 226
+31586 ms: T04 escrevendo bloco  29
+31639 ms: T05 escreveu   bloco 210
+31639 ms: T05 escrevendo bloco  45
+31701 ms: T06 escreveu   bloco 194
+31701 ms: T06 escrevendo bloco  61
+31750 ms: T07 escreveu   bloco 178
+31750 ms: T07 escrevendo bloco  77
+31800 ms: T08 escreveu   bloco 162
+31800 ms: T08 escrevendo bloco  93
+31863 ms: T09 escreveu   bloco 146
+31863 ms: T09 escrevendo bloco 109
+31919 ms: T10 escreveu   bloco 130
+31919 ms: T10 escrevendo bloco 125
+32098 ms: T03 escreveu   bloco  13
+32098 ms: T03 lendo bloco  14
+32157 ms: T04 escreveu   bloco  29
+32157 ms: T04 lendo bloco  30
+32207 ms: T05 escreveu   bloco  45
+32207 ms: T05 lendo bloco  46
+32265 ms: T06 escreveu   bloco  61
+32265 ms: T06 lendo bloco  62
+32320 ms: T07 escreveu   bloco  77
+32320 ms: T07 lendo bloco  78
+32374 ms: T08 escreveu   bloco  93
+32374 ms: T08 lendo bloco  94
+32430 ms: T09 escreveu   bloco 109
+32430 ms: T09 lendo bloco 110
+32497 ms: T10 escreveu   bloco 125
+32497 ms: T10 lendo bloco 126
+32667 ms: T03 leu   bloco  14
+32667 ms: T03 lendo bloco 241
+32729 ms: T04 leu   bloco  30
+32729 ms: T04 lendo bloco 225
+32785 ms: T05 leu   bloco  46
+32785 ms: T05 lendo bloco 209
+32855 ms: T06 leu   bloco  62
+32855 ms: T06 lendo bloco 193
+32923 ms: T07 leu   bloco  78
+32923 ms: T07 lendo bloco 177
+32971 ms: T08 leu   bloco  94
+32971 ms: T08 lendo bloco 161
+33024 ms: T09 leu   bloco 110
+33024 ms: T09 lendo bloco 145
+33095 ms: T10 leu   bloco 126
+33095 ms: T10 lendo bloco 129
+33254 ms: T03 leu   bloco 241
+33254 ms: T03 bloco  14 tem: [<--bloco 0014-------------------------------------------------->]
+33254 ms: T03 bloco 241 tem: [<--bloco 0241-------------------------------------------------->]
+33254 ms: T03 escrevendo bloco 241
+33315 ms: T04 leu   bloco 225
+33315 ms: T04 bloco  30 tem: [<--bloco 0030-------------------------------------------------->]
+33315 ms: T04 bloco 225 tem: [<--bloco 0225-------------------------------------------------->]
+33315 ms: T04 escrevendo bloco 225
+33374 ms: T05 leu   bloco 209
+33374 ms: T05 bloco  46 tem: [<--bloco 0046-------------------------------------------------->]
+33374 ms: T05 bloco 209 tem: [<--bloco 0209-------------------------------------------------->]
+33374 ms: T05 escrevendo bloco 209
+33441 ms: T06 leu   bloco 193
+33441 ms: T06 bloco  62 tem: [<--bloco 0062-------------------------------------------------->]
+33441 ms: T06 bloco 193 tem: [<--bloco 0193-------------------------------------------------->]
+33441 ms: T06 escrevendo bloco 193
+33507 ms: T07 leu   bloco 177
+33507 ms: T07 bloco  78 tem: [<--bloco 0078-------------------------------------------------->]
+33507 ms: T07 bloco 177 tem: [<--bloco 0177-------------------------------------------------->]
+33507 ms: T07 escrevendo bloco 177
+33560 ms: T08 leu   bloco 161
+33560 ms: T08 bloco  94 tem: [<--bloco 0094-------------------------------------------------->]
+33560 ms: T08 bloco 161 tem: [<--bloco 0161-------------------------------------------------->]
+33560 ms: T08 escrevendo bloco 161
+33625 ms: T09 leu   bloco 145
+33625 ms: T09 bloco 110 tem: [<--bloco 0110-------------------------------------------------->]
+33625 ms: T09 bloco 145 tem: [<--bloco 0145-------------------------------------------------->]
+33625 ms: T09 escrevendo bloco 145
+33690 ms: T10 leu   bloco 129
+33690 ms: T10 bloco 126 tem: [<--bloco 0126-------------------------------------------------->]
+33690 ms: T10 bloco 129 tem: [<--bloco 0129-------------------------------------------------->]
+33690 ms: T10 escrevendo bloco 129
+33864 ms: T03 escreveu   bloco 241
+33864 ms: T03 escrevendo bloco  14
+33933 ms: T04 escreveu   bloco 225
+33933 ms: T04 escrevendo bloco  30
+33988 ms: T05 escreveu   bloco 209
+33988 ms: T05 escrevendo bloco  46
+34036 ms: T06 escreveu   bloco 193
+34036 ms: T06 escrevendo bloco  62
+34108 ms: T07 escreveu   bloco 177
+34108 ms: T07 escrevendo bloco  78
+34154 ms: T08 escreveu   bloco 161
+34154 ms: T08 escrevendo bloco  94
+34208 ms: T09 escreveu   bloco 145
+34208 ms: T09 escrevendo bloco 110
+34275 ms: T10 escreveu   bloco 129
+34275 ms: T10 escrevendo bloco 126
+34435 ms: T03 escreveu   bloco  14
+34435 ms: T03 lendo bloco  15
+34492 ms: T04 escreveu   bloco  30
+34492 ms: T04 lendo bloco  31
+34543 ms: T05 escreveu   bloco  46
+34543 ms: T05 lendo bloco  47
+34607 ms: T06 escreveu   bloco  62
+34607 ms: T06 lendo bloco  63
+34668 ms: T07 escreveu   bloco  78
+34668 ms: T07 lendo bloco  79
+34725 ms: T08 escreveu   bloco  94
+34725 ms: T08 lendo bloco  95
+34780 ms: T09 escreveu   bloco 110
+34780 ms: T09 lendo bloco 111
+34838 ms: T10 escreveu   bloco 126
+34838 ms: T10 lendo bloco 127
+35011 ms: T03 leu   bloco  15
+35011 ms: T03 lendo bloco 240
+35076 ms: T04 leu   bloco  31
+35076 ms: T04 lendo bloco 224
+35130 ms: T05 leu   bloco  47
+35130 ms: T05 lendo bloco 208
+35198 ms: T06 leu   bloco  63
+35198 ms: T06 lendo bloco 192
+35261 ms: T07 leu   bloco  79
+35261 ms: T07 lendo bloco 176
+35319 ms: T08 leu   bloco  95
+35319 ms: T08 lendo bloco 160
+35381 ms: T09 leu   bloco 111
+35381 ms: T09 lendo bloco 144
+35453 ms: T10 leu   bloco 127
+35453 ms: T10 lendo bloco 128
+35603 ms: T03 leu   bloco 240
+35603 ms: T03 bloco  15 tem: [<--bloco 0015-------------------------------------------------->]
+35603 ms: T03 bloco 240 tem: [<--bloco 0240-------------------------------------------------->]
+35603 ms: T03 escrevendo bloco 240
+35652 ms: T04 leu   bloco 224
+35652 ms: T04 bloco  31 tem: [<--bloco 0031-------------------------------------------------->]
+35652 ms: T04 bloco 224 tem: [<--bloco 0224-------------------------------------------------->]
+35652 ms: T04 escrevendo bloco 224
+35715 ms: T05 leu   bloco 208
+35715 ms: T05 bloco  47 tem: [<--bloco 0047-------------------------------------------------->]
+35715 ms: T05 bloco 208 tem: [<--bloco 0208-------------------------------------------------->]
+35715 ms: T05 escrevendo bloco 208
+35778 ms: T06 leu   bloco 192
+35778 ms: T06 bloco  63 tem: [<--bloco 0063-------------------------------------------------->]
+35778 ms: T06 bloco 192 tem: [<--bloco 0192-------------------------------------------------->]
+35778 ms: T06 escrevendo bloco 192
+35830 ms: T07 leu   bloco 176
+35830 ms: T07 bloco  79 tem: [<--bloco 0079-------------------------------------------------->]
+35830 ms: T07 bloco 176 tem: [<--bloco 0176-------------------------------------------------->]
+35830 ms: T07 escrevendo bloco 176
+35886 ms: T08 leu   bloco 160
+35886 ms: T08 bloco  95 tem: [<--bloco 0095-------------------------------------------------->]
+35886 ms: T08 bloco 160 tem: [<--bloco 0160-------------------------------------------------->]
+35886 ms: T08 escrevendo bloco 160
+35942 ms: T09 leu   bloco 144
+35942 ms: T09 bloco 111 tem: [<--bloco 0111-------------------------------------------------->]
+35942 ms: T09 bloco 144 tem: [<--bloco 0144-------------------------------------------------->]
+35942 ms: T09 escrevendo bloco 144
+35990 ms: T10 leu   bloco 128
+35990 ms: T10 bloco 127 tem: [<--bloco 0127-------------------------------------------------->]
+35990 ms: T10 bloco 128 tem: [<--bloco 0128-------------------------------------------------->]
+35990 ms: T10 escrevendo bloco 128
+36144 ms: T03 escreveu   bloco 240
+36144 ms: T03 escrevendo bloco  15
+36206 ms: T04 escreveu   bloco 224
+36206 ms: T04 escrevendo bloco  31
+36278 ms: T05 escreveu   bloco 208
+36278 ms: T05 escrevendo bloco  47
+36325 ms: T06 escreveu   bloco 192
+36325 ms: T06 escrevendo bloco  63
+36388 ms: T07 escreveu   bloco 176
+36388 ms: T07 escrevendo bloco  79
+36441 ms: T08 escreveu   bloco 160
+36441 ms: T08 escrevendo bloco  95
+36509 ms: T09 escreveu   bloco 144
+36509 ms: T09 escrevendo bloco 111
+36575 ms: T10 escreveu   bloco 128
+36575 ms: T10 escrevendo bloco 127
+36740 ms: T03 escreveu   bloco  15
+36740 ms: T03 terminou
+Task 3 exit: execution time 36740 ms, processor time     0 ms, 65 activations
+36809 ms: T04 escreveu   bloco  31
+36809 ms: T04 terminou
+Task 4 exit: execution time 36809 ms, processor time     0 ms, 65 activations
+36866 ms: T05 escreveu   bloco  47
+36866 ms: T05 terminou
+Task 5 exit: execution time 36866 ms, processor time     0 ms, 65 activations
+36916 ms: T06 escreveu   bloco  63
+36916 ms: T06 terminou
+Task 6 exit: execution time 36916 ms, processor time     0 ms, 65 activations
+36969 ms: T07 escreveu   bloco  79
+36969 ms: T07 terminou
+Task 7 exit: execution time 36969 ms, processor time     0 ms, 65 activations
+37034 ms: T08 escreveu   bloco  95
+37034 ms: T08 terminou
+Task 8 exit: execution time 37034 ms, processor time     0 ms, 65 activations
+37092 ms: T09 escreveu   bloco 111
+37092 ms: T09 terminou
+Task 9 exit: execution time 37092 ms, processor time     0 ms, 65 activations
+37144 ms: T10 escreveu   bloco 127
+37144 ms: T10 terminou
+Task 10 exit: execution time 37144 ms, processor time     0 ms, 65 activations
+main: fim
+Task 0 exit: execution time 37144 ms, processor time     0 ms, 9 activations
+Task 1 exit: execution time 37144 ms, processor time 37144 ms, 1547 activations
