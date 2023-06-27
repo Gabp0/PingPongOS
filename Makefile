@@ -7,7 +7,7 @@ CPPFLAGS = -Wall -g --std=c99
 LDLIBS = -lrt -lm
 
 # diretorios fonte
-VPATH = lib:tests
+VPATH = core:tests
 
 objs = ppos_core.o ppos_disk.o queue.o disk.o $(TEST).o
 

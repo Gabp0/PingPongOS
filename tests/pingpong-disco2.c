@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../lib/ppos.h"
-#include "../lib/ppos_disk.h"
+#include "../core/ppos.h"
+#include "../core/ppos_disk.h"
 
 #define NUMTASKS 8
 

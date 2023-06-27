@@ -3,7 +3,7 @@
 #define _XOPEN_SOURCE 600
 
 #include "ppos_disk.h"
-#include "disk.h"
+#include "disk/disk.h"
 #include "ppos.h"
 #include "ppos_data.h"
 #include "queue.h"

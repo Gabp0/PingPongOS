@@ -1,8 +1,8 @@
 // Teste de produtor/consumidor com semaforos
 #include <stdio.h>
 #include <stdlib.h>
-#include "../lib/ppos.h"
-#include "../lib/queue.h"
+#include "../core/ppos.h"
+#include "../core/queue.h"
 
 typedef struct msg_t
 {

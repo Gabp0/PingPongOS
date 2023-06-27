@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "../lib/ppos.h"
+#include "../core/ppos.h"
 
 task_t prod[3], somador, cons[2];
 mqueue_t queueValores, queueRaizes;
